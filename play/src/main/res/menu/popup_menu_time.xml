@@ -1,0 +1,14 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/option_1"
+        android:icon="@drawable/timer_off"
+        android:title="不启用" />
+    <item android:id="@+id/option_2"
+        android:icon="@drawable/timer_play"
+        android:title="播完当前" />
+    <item android:id="@+id/option_3"
+        android:icon="@drawable/time_30"
+        android:title="30分钟" />
+    <item android:id="@+id/option_4"
+        android:icon="@drawable/time_60"
+        android:title="60分钟" />
+</menu>

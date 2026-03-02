@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@drawable/bg_bottom">
+
+        <TextView
+            android:id="@+id/curr_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:textColor="@android:color/white"
+            android:textSize="12sp"
+            tools:text="00:00"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/total_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:textColor="#BBFFFFFF"
+            android:textSize="12sp"
+            tools:text="/ 00:00"
+            app:layout_constraintBottom_toBottomOf="@+id/curr_time"
+            app:layout_constraintStart_toEndOf="@+id/curr_time"
+            app:layout_constraintTop_toTopOf="@+id/curr_time" />
+
+        <com.google.android.material.button.MaterialButton
+            style="?attr/materialIconButtonStyle"
+            android:id="@+id/skip_previous"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            app:iconTint="#ffffff"
+            android:visibility="gone"
+            app:icon="@drawable/skip_previous"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/curr_time" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/play"
+            style="?attr/materialIconButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:icon="@drawable/play_arrow"
+            app:iconTint="#ffffff"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/skip_previous"
+            app:layout_constraintTop_toBottomOf="@+id/curr_time" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/skip_next"
+            style="?attr/materialIconButtonStyle"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            app:icon="@drawable/skip_next"
+            app:iconTint="#ffffff"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/play"
+            app:layout_constraintStart_toEndOf="@+id/play"
+            app:layout_constraintTop_toTopOf="@+id/play" />
+
+        <com.google.android.material.slider.Slider
+            android:id="@+id/seekBar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/play"
+            app:layout_constraintEnd_toStartOf="@+id/speed"
+            app:layout_constraintStart_toEndOf="@+id/skip_next"
+            app:layout_constraintTop_toTopOf="@+id/play"
+            app:thumbHeight="10dp"
+            app:trackHeight="8dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/speed"
+            style="?attr/materialIconButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:icon="@drawable/speed"
+            app:iconTint="#ffffff"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/play"
+            app:layout_constraintEnd_toStartOf="@+id/selected_writings"
+            app:layout_constraintTop_toTopOf="@+id/play" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/selected_writings"
+            style="?attr/materialIconButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:icon="@drawable/animated_images"
+            android:visibility="gone"
+            app:iconTint="#ffffff"
+            app:layout_constraintBottom_toBottomOf="@+id/play"
+            app:layout_constraintEnd_toStartOf="@+id/fullscreen"
+            app:layout_constraintTop_toTopOf="@+id/play" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/fullscreen"
+            style="?attr/materialIconButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:icon="@drawable/fullscreen"
+            app:iconTint="#ffffff"
+            app:layout_constraintBottom_toBottomOf="@+id/play"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/play" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>
