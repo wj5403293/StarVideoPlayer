@@ -35,35 +35,33 @@ import xyz.doikki.videoplayer.util.PlayerUtils;
  */
 public class StarStandardVideoController extends GestureVideoController implements View.OnClickListener {
 
-    private MaterialButton mLockButton;                     // 锁屏按钮
-    private CircularProgressIndicator mLoadingIndicator;    // 加载指示器
-    private TextView mTcpSpeedView;                         // 网速显示
-    private LinearLayout mSpeedLayout;                      // 长按倍速布局
-    private TextView mSpeedTextView;                         // 倍速文本
+    private MaterialButton mLockButton;
+    private CircularProgressIndicator mLoadingIndicator;
+    private TextView mTcpSpeedView;
+    private LinearLayout mSpeedLayout;
+    private TextView mSpeedTextView;
 
-    private boolean mIsBuffering;                            // 是否正在缓冲
+    private boolean mIsBuffering;
 
-    // 长按倍速回调接口
+    private OnSpeedListener mOnSpeedListener;
+    private OnCancelSpeedListener mOnCancelSpeedListener;
+
     public interface OnSpeedListener {
         void onSpeed();
     }
-    private static OnSpeedListener sOnSpeedListener;
 
-    public static void setOnSpeedListener(OnSpeedListener listener) {
-        sOnSpeedListener = listener;
-    }
-
-    // 取消倍速回调接口
     public interface OnCancelSpeedListener {
         void onCancelSpeed();
     }
-    private static OnCancelSpeedListener sOnCancelSpeedListener;
 
-    public static void setOnCancelSpeedListener(OnCancelSpeedListener listener) {
-        sOnCancelSpeedListener = listener;
+    public void setOnSpeedListener(OnSpeedListener listener) {
+        mOnSpeedListener = listener;
     }
 
-    // 构造方法
+    public void setOnCancelSpeedListener(OnCancelSpeedListener listener) {
+        mOnCancelSpeedListener = listener;
+    }
+
     public StarStandardVideoController(@NonNull Context context) {
         this(context, null);
     }
@@ -84,14 +82,12 @@ public class StarStandardVideoController extends GestureVideoController implemen
     @Override
     protected void initView() {
         super.initView();
-        // 绑定控件
         mLockButton = findViewById(R.id.lock);
         mLoadingIndicator = findViewById(R.id.loading);
         mTcpSpeedView = findViewById(R.id.TcpSpeed);
         mSpeedLayout = findViewById(R.id.speed_layout);
         mSpeedTextView = findViewById(R.id.speed_text);
 
-        // 设置点击监听
         mLockButton.setOnClickListener(this);
     }
 
@@ -101,54 +97,37 @@ public class StarStandardVideoController extends GestureVideoController implemen
      * @param isLive 是否为直播
      */
     public void addDefaultControlComponent(String title, boolean isLive) {
-        // 添加完成界面
         StarCompleteView completeView = new StarCompleteView(getContext());
-        // 添加错误界面
         StarErrorView errorView = new StarErrorView(getContext());
-        // 添加准备界面
         StarPrepareView prepareView = new StarPrepareView(getContext());
-        prepareView.setClickStart(); // 设置点击封面开始播放
-        // 添加标题栏
+        prepareView.setClickStart();
         StarTitleView titleView = new StarTitleView(getContext());
         titleView.setTitle(title);
-        // 将以上组件添加到控制器
         addControlComponent(completeView, errorView, prepareView, titleView);
 
-        // 添加手势控制
         addControlComponent(new StarGestureView(getContext()));
 
-        // 根据直播/点播添加底部控制栏
         if (isLive) {
             addControlComponent(new StarLiveControlView(getContext()));
         } else {
             addControlComponent(new StarBottomView(getContext()));
         }
 
-        // 设置是否可拖动进度（点播可拖动，直播不可）
         setCanChangePosition(!isLive);
     }
 
-    /**
-     * 设置网速文本
-     */
     public void setTcpSpeed(String speed) {
         if (mTcpSpeedView != null) {
             mTcpSpeedView.setText(speed);
         }
     }
 
-    /**
-     * 设置长按倍速布局可见性
-     */
     public void setSpeedLayoutVisibility(int visibility) {
         if (mSpeedLayout != null) {
             mSpeedLayout.setVisibility(visibility);
         }
     }
 
-    /**
-     * 设置倍速文本
-     */
     public void setSpeedText(String text) {
         if (mSpeedTextView != null) {
             mSpeedTextView.setText(text);
@@ -159,7 +138,6 @@ public class StarStandardVideoController extends GestureVideoController implemen
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.lock) {
-            // 切换锁屏状态
             mControlWrapper.toggleLockState();
         }
     }
@@ -167,20 +145,18 @@ public class StarStandardVideoController extends GestureVideoController implemen
     @Override
     protected void onLockStateChanged(boolean isLocked) {
         super.onLockStateChanged(isLocked);
-        // 更新锁按钮图标
         if (isLocked) {
-            mLockButton.setIconResource(R.drawable.lock); // 锁定图标
+            mLockButton.setIconResource(R.drawable.lock);
         } else {
-            mLockButton.setIconResource(R.drawable.lock_open); // 解锁图标
+            mLockButton.setIconResource(R.drawable.lock_open);
         }
     }
 
-    // 修正：将返回类型改为 void，并调用父类方法
     @Override
     public void onLongPress(MotionEvent e) {
-        super.onLongPress(e); // 调用父类处理（如果有必要）
-        if (sOnSpeedListener != null) {
-            sOnSpeedListener.onSpeed();
+        super.onLongPress(e);
+        if (mOnSpeedListener != null) {
+            mOnSpeedListener.onSpeed();
         }
     }
 
@@ -190,9 +166,8 @@ public class StarStandardVideoController extends GestureVideoController implemen
         switch (action) {
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
-                // 手指松开或取消，取消倍速
-                if (sOnCancelSpeedListener != null) {
-                    sOnCancelSpeedListener.onCancelSpeed();
+                if (mOnCancelSpeedListener != null) {
+                    mOnCancelSpeedListener.onCancelSpeed();
                 }
                 break;
         }
@@ -202,7 +177,6 @@ public class StarStandardVideoController extends GestureVideoController implemen
     @Override
     protected void onVisibilityChanged(boolean isVisible, Animation anim) {
         super.onVisibilityChanged(isVisible, anim);
-        // 全屏模式下，控制栏显示/隐藏时同步锁按钮的显示
         if (mControlWrapper != null && mControlWrapper.isFullScreen()) {
             if (isVisible) {
                 if (mLockButton.getVisibility() == GONE) {
@@ -227,16 +201,13 @@ public class StarStandardVideoController extends GestureVideoController implemen
         super.onPlayerStateChanged(playerState);
         switch (playerState) {
             case VideoView.PLAYER_NORMAL:
-                // 普通模式下锁按钮隐藏
                 mLockButton.setVisibility(GONE);
                 break;
             case VideoView.PLAYER_FULL_SCREEN:
-                // 全屏模式下，根据控制栏显示状态决定锁按钮显示
                 mLockButton.setVisibility(isShowing() ? VISIBLE : GONE);
                 break;
         }
 
-        // 刘海屏适配：根据屏幕方向调整锁按钮边距
         if (mActivity != null && hasCutout()) {
             int orientation = mActivity.getRequestedOrientation();
             int dp24 = PlayerUtils.dp2px(getContext(), 24);
@@ -290,13 +261,11 @@ public class StarStandardVideoController extends GestureVideoController implemen
 
     @Override
     public boolean onBackPressed() {
-        // 如果当前处于锁定状态，则显示提示并返回 true 拦截返回键
         if (isLocked()) {
-            show(); // 显示控制栏
+            show();
             Toast.makeText(getContext(), "控制器已锁定", Toast.LENGTH_SHORT).show();
             return true;
         }
-        // 如果当前是全屏，则退出全屏
         if (mControlWrapper != null && mControlWrapper.isFullScreen()) {
             return stopFullScreen();
         }

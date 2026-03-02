@@ -10,7 +10,6 @@ import android.view.animation.TranslateAnimation;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -34,7 +33,7 @@ public class StarEpisodeView extends FrameLayout implements IControlComponent {
     private LinearLayout mPanelView;
     private View mDimView;
     private RecyclerView mRecyclerView;
-    private MaterialButton mCloseButton;    // ★ 修复1：补上关闭按钮引用
+    private MaterialButton mCloseButton;
 
     private EpisodeAdapter mAdapter;
     private boolean mIsShowing = false;
@@ -68,18 +67,16 @@ public class StarEpisodeView extends FrameLayout implements IControlComponent {
         mDimView      = findViewById(R.id.dim);
         mPanelView    = findViewById(R.id.panel);
         mRecyclerView = findViewById(R.id.recycler_view);
-        mCloseButton  = findViewById(R.id.btn_close);   // ★ 修复1：绑定关闭按钮
+        mCloseButton  = findViewById(R.id.btn_close);
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mAdapter = new EpisodeAdapter();
         mRecyclerView.setAdapter(mAdapter);
 
         mDimView.setOnClickListener(v -> hide());
-        mCloseButton.setOnClickListener(v -> hide());   // ★ 修复1：绑上监听
-        mPanelView.setOnClickListener(v -> { });        // 消费事件，不穿透蒙层
+        mCloseButton.setOnClickListener(v -> hide());
+        mPanelView.setOnClickListener(v -> { });
     }
-
-    // ---- 数据 ----
 
     public void setEpisodes(List<String> episodes, int currentIndex) {
         mAdapter.setData(episodes, currentIndex);
@@ -89,9 +86,6 @@ public class StarEpisodeView extends FrameLayout implements IControlComponent {
         mAdapter.setCurrentIndex(index);
         mRecyclerView.scrollToPosition(Math.max(0, index));
     }
-
-
-    // ---- 显示 / 隐藏 ----
 
     public void show() {
         if (mIsShowing) return;
@@ -129,8 +123,6 @@ public class StarEpisodeView extends FrameLayout implements IControlComponent {
 
     public boolean isEpisodeShowing() { return mIsShowing; }
 
-    // ---- 触摸拦截 ----
-
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         return false;
@@ -140,8 +132,6 @@ public class StarEpisodeView extends FrameLayout implements IControlComponent {
     public boolean onTouchEvent(MotionEvent event) {
         return mIsShowing;
     }
-
-    // ---- IControlComponent ----
 
     @Override
     public void attach(@NonNull ControlWrapper controlWrapper) {
@@ -165,7 +155,6 @@ public class StarEpisodeView extends FrameLayout implements IControlComponent {
 
     @Override
     public void onPlayerStateChanged(int playerState) {
-//        if (mIsShowing) hide();onPlayerStateChanged
     }
 
     @Override
@@ -176,8 +165,6 @@ public class StarEpisodeView extends FrameLayout implements IControlComponent {
         if (isLocked && mIsShowing) hide();
     }
 
-    // ---- Adapter ----
-
     private class EpisodeAdapter extends RecyclerView.Adapter<EpisodeAdapter.VH> {
 
         private final List<String> mData = new ArrayList<>();
@@ -185,7 +172,9 @@ public class StarEpisodeView extends FrameLayout implements IControlComponent {
 
         void setData(List<String> data, int currentIndex) {
             mData.clear();
-            mData.addAll(data);
+            if (data != null) {
+                mData.addAll(data);
+            }
             mCurrentIndex = currentIndex;
             notifyDataSetChanged();
         }
@@ -210,8 +199,8 @@ public class StarEpisodeView extends FrameLayout implements IControlComponent {
             holder.titleView.setText(mData.get(position));
             holder.titleView.setSelected(position == mCurrentIndex);
             holder.itemView.setOnClickListener(v -> {
-                int pos = holder.getAdapterPosition();
-                if (pos == RecyclerView.NO_ID) return;
+                int pos = holder.getBindingAdapterPosition();
+                if (pos == RecyclerView.NO_POSITION) return;
                 setCurrentIndex(pos);
                 if (mOnEpisodeSelectListener != null)
                     mOnEpisodeSelectListener.onEpisodeSelect(pos, mData.get(pos));

@@ -27,7 +27,6 @@ public class StarBottomView extends FrameLayout implements IControlComponent {
 
     private ControlWrapper mControlWrapper;
 
-    // 控件引用（指向当前可见布局中的控件）
     private TextView mCurrTimeView;
     private TextView mTotalTimeView;
     private MaterialButton mSkipPreviousView;
@@ -39,23 +38,15 @@ public class StarBottomView extends FrameLayout implements IControlComponent {
     private Slider mSeekBar;
     private ProgressBar mBottomProgress;
 
-    // 静态控件引用（供外部直接访问）
-    public static MaterialButton xuanji;
-    public static MaterialButton speed;
-    public static MaterialButton zplay;
-    public static MaterialButton yplay;
-
     private boolean mIsDragging;
     private boolean mIsShowBottomProgress = true;
 
-    // 静态回调接口
-    private static OnSelectClickListener sOnSelectClickListener;
-    private static OnSpeedClickListener sOnSpeedClickListener;
-    private static OnUpSetClickListener sOnUpSetClickListener;
-    private static OnDownSetClickListener sOnDownSetClickListener;
-    private static OnProgressListener sOnProgressListener;
+    private OnSelectClickListener mOnSelectClickListener;
+    private OnSpeedClickListener mOnSpeedClickListener;
+    private OnUpSetClickListener mOnUpSetClickListener;
+    private OnDownSetClickListener mOnDownSetClickListener;
+    private OnProgressListener mOnProgressListener;
 
-    // 当前显示的布局根视图（用于绑定控件）
     private View mCurrentLayout;
 
     public StarBottomView(@NonNull Context context) {
@@ -73,19 +64,11 @@ public class StarBottomView extends FrameLayout implements IControlComponent {
 
     private void init() {
         setVisibility(GONE);
-        // 填充主布局，其中包含两个 include
         LayoutInflater.from(getContext()).inflate(R.layout.star_bottom_view, this, true);
-
-        // 底部细进度条始终存在
         mBottomProgress = findViewById(R.id.bottom_progress);
-
-        // 默认显示竖屏布局
         showNormalLayout();
     }
 
-    /**
-     * 切换到竖屏布局并绑定控件
-     */
     private void showNormalLayout() {
         View normalLayout = findViewById(R.id.layout_normal);
         View fullscreenLayout = findViewById(R.id.layout_fullscreen);
@@ -96,13 +79,9 @@ public class StarBottomView extends FrameLayout implements IControlComponent {
         mCurrentLayout = normalLayout;
 
         bindViews(mCurrentLayout);
-        // 设置全屏按钮图标为“进入全屏”
         mFullscreenView.setIconResource(R.drawable.fullscreen);
     }
 
-    /**
-     * 切换到全屏布局并绑定控件
-     */
     private void showFullscreenLayout() {
         View normalLayout = findViewById(R.id.layout_normal);
         View fullscreenLayout = findViewById(R.id.layout_fullscreen);
@@ -113,15 +92,10 @@ public class StarBottomView extends FrameLayout implements IControlComponent {
         mCurrentLayout = fullscreenLayout;
 
         bindViews(mCurrentLayout);
-        // 设置全屏按钮图标为“退出全屏”
         mFullscreenView.setIconResource(R.drawable.fullscreen_exit);
     }
 
-    /**
-     * 从指定布局根视图绑定所有控件，并重新设置监听器
-     */
     private void bindViews(View root) {
-        // 绑定控件
         mCurrTimeView = root.findViewById(R.id.curr_time);
         mTotalTimeView = root.findViewById(R.id.total_time);
         mSeekBar = root.findViewById(R.id.seekBar);
@@ -132,31 +106,17 @@ public class StarBottomView extends FrameLayout implements IControlComponent {
         mSelectedWritingsView = root.findViewById(R.id.selected_writings);
         mFullscreenView = root.findViewById(R.id.fullscreen);
 
-        // 更新静态控件引用（注意：这些静态变量会被多个实例共享，但通常只有一个播放器）
-        xuanji = mSelectedWritingsView;
-        speed = mSpeedView;
-        zplay = mSkipPreviousView;
-        yplay = mSkipNextView;
-
-        // 重新设置 Slider 范围（防止因视图重建而丢失）
         mSeekBar.setValueFrom(0f);
         mSeekBar.setValueTo(1000f);
 
-        // 重新设置点击监听器
         setupClickListeners();
-
-        // 重新设置进度条监听器
         setupSeekBarListener();
 
-        // 如果已有播放状态，需要恢复播放按钮图标（例如根据 mControlWrapper 的状态）
         if (mControlWrapper != null) {
             updatePlayButtonIcon();
         }
     }
 
-    /**
-     * 根据当前播放状态更新播放按钮图标
-     */
     private void updatePlayButtonIcon() {
         if (mControlWrapper == null || mPlayView == null) return;
         if (mControlWrapper.isPlaying()) {
@@ -172,19 +132,19 @@ public class StarBottomView extends FrameLayout implements IControlComponent {
         });
 
         mSkipPreviousView.setOnClickListener(v -> {
-            if (sOnUpSetClickListener != null) sOnUpSetClickListener.onClick(v);
+            if (mOnUpSetClickListener != null) mOnUpSetClickListener.onClick(v);
         });
 
         mSkipNextView.setOnClickListener(v -> {
-            if (sOnDownSetClickListener != null) sOnDownSetClickListener.onClick(v);
+            if (mOnDownSetClickListener != null) mOnDownSetClickListener.onClick(v);
         });
 
         mSpeedView.setOnClickListener(v -> {
-            if (sOnSpeedClickListener != null) sOnSpeedClickListener.onClick(v);
+            if (mOnSpeedClickListener != null) mOnSpeedClickListener.onClick(v);
         });
 
         mSelectedWritingsView.setOnClickListener(v -> {
-            if (sOnSelectClickListener != null) sOnSelectClickListener.onClick(v);
+            if (mOnSelectClickListener != null) mOnSelectClickListener.onClick(v);
         });
 
         mFullscreenView.setOnClickListener(v -> toggleFullScreen());
@@ -229,40 +189,44 @@ public class StarBottomView extends FrameLayout implements IControlComponent {
         mControlWrapper.toggleFullScreen(activity);
     }
 
-    // 对外暴露静态接口
     public interface OnSelectClickListener {
         void onClick(View view);
-    }
-    public static void setOnSelectClickListener(OnSelectClickListener listener) {
-        sOnSelectClickListener = listener;
     }
 
     public interface OnSpeedClickListener {
         void onClick(View view);
     }
-    public static void setOnSpeedClickListener(OnSpeedClickListener listener) {
-        sOnSpeedClickListener = listener;
-    }
 
     public interface OnUpSetClickListener {
         void onClick(View view);
-    }
-    public static void setOnUpSetClickListener(OnUpSetClickListener listener) {
-        sOnUpSetClickListener = listener;
     }
 
     public interface OnDownSetClickListener {
         void onClick(View view);
     }
-    public static void setOnDownSetClickListener(OnDownSetClickListener listener) {
-        sOnDownSetClickListener = listener;
-    }
 
     public interface OnProgressListener {
         void onProgress();
     }
-    public static void setOnProgressListener(OnProgressListener listener) {
-        sOnProgressListener = listener;
+
+    public void setOnSelectClickListener(OnSelectClickListener listener) {
+        mOnSelectClickListener = listener;
+    }
+
+    public void setOnSpeedClickListener(OnSpeedClickListener listener) {
+        mOnSpeedClickListener = listener;
+    }
+
+    public void setOnUpSetClickListener(OnUpSetClickListener listener) {
+        mOnUpSetClickListener = listener;
+    }
+
+    public void setOnDownSetClickListener(OnDownSetClickListener listener) {
+        mOnDownSetClickListener = listener;
+    }
+
+    public void setOnProgressListener(OnProgressListener listener) {
+        mOnProgressListener = listener;
     }
 
     public void showBottomProgress(boolean isShow) {
@@ -272,7 +236,6 @@ public class StarBottomView extends FrameLayout implements IControlComponent {
         }
     }
 
-    //------------------------ IControlComponent 接口实现 ------------------------
     @Override
     public void attach(@NonNull ControlWrapper controlWrapper) {
         mControlWrapper = controlWrapper;
@@ -369,8 +332,8 @@ public class StarBottomView extends FrameLayout implements IControlComponent {
     public void setProgress(int duration, int position) {
         if (mIsDragging) return;
 
-        if (sOnProgressListener != null) {
-            sOnProgressListener.onProgress();
+        if (mOnProgressListener != null) {
+            mOnProgressListener.onProgress();
         }
 
         if (duration > 0) {
