@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.StarVideoPlayer">
         <activity
-            android:name=".MainActivity"
+            android:name="com.star.videoplayer.MainActivity"
             android:exported="true"
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait"

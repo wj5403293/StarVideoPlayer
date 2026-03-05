@@ -35,8 +35,10 @@ public class StarEpisodeView extends FrameLayout implements IControlComponent {
     private RecyclerView mRecyclerView;
     private MaterialButton mCloseButton;
 
-    private EpisodeAdapter mAdapter;
+    private RecyclerView.Adapter<?> mAdapter;
+    private EpisodeAdapter mDefaultAdapter;
     private boolean mIsShowing = false;
+    private boolean mUseCustomAdapter = false;
 
     public interface OnEpisodeSelectListener {
         void onEpisodeSelect(int index, String title);
@@ -70,7 +72,8 @@ public class StarEpisodeView extends FrameLayout implements IControlComponent {
         mCloseButton  = findViewById(R.id.btn_close);
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mAdapter = new EpisodeAdapter();
+        mDefaultAdapter = new EpisodeAdapter();
+        mAdapter = mDefaultAdapter;
         mRecyclerView.setAdapter(mAdapter);
 
         mDimView.setOnClickListener(v -> hide());
@@ -79,12 +82,28 @@ public class StarEpisodeView extends FrameLayout implements IControlComponent {
     }
 
     public void setEpisodes(List<String> episodes, int currentIndex) {
-        mAdapter.setData(episodes, currentIndex);
+        if (mUseCustomAdapter) return;
+        mDefaultAdapter.setData(episodes, currentIndex);
     }
 
     public void setCurrentIndex(int index) {
-        mAdapter.setCurrentIndex(index);
+        if (mUseCustomAdapter) return;
+        mDefaultAdapter.setCurrentIndex(index);
         mRecyclerView.scrollToPosition(Math.max(0, index));
+    }
+
+    public void setAdapter(RecyclerView.Adapter<?> adapter) {
+        mUseCustomAdapter = true;
+        mAdapter = adapter;
+        mRecyclerView.setAdapter(mAdapter);
+    }
+
+    public RecyclerView.Adapter<?> getAdapter() {
+        return mAdapter;
+    }
+
+    public RecyclerView getRecyclerView() {
+        return mRecyclerView;
     }
 
     public void show() {
@@ -196,11 +215,12 @@ public class StarEpisodeView extends FrameLayout implements IControlComponent {
 
         @Override
         public void onBindViewHolder(@NonNull VH holder, int position) {
+            if (position < 0 || position >= mData.size()) return;
             holder.titleView.setText(mData.get(position));
             holder.titleView.setSelected(position == mCurrentIndex);
             holder.itemView.setOnClickListener(v -> {
                 int pos = holder.getBindingAdapterPosition();
-                if (pos == RecyclerView.NO_POSITION) return;
+                if (pos == RecyclerView.NO_POSITION || pos < 0 || pos >= mData.size()) return;
                 setCurrentIndex(pos);
                 if (mOnEpisodeSelectListener != null)
                     mOnEpisodeSelectListener.onEpisodeSelect(pos, mData.get(pos));

@@ -15,6 +15,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.star.play.R;
 
@@ -23,15 +24,11 @@ import xyz.doikki.videoplayer.controller.IGestureComponent;
 import xyz.doikki.videoplayer.player.VideoView;
 import xyz.doikki.videoplayer.util.PlayerUtils;
 
-/**
- * 手势控制视图
- * 显示亮度、音量、进度调节的反馈
- */
 public class StarGestureView extends FrameLayout implements IGestureComponent {
 
     private ControlWrapper mControlWrapper;
 
-    private ImageView mIconView;
+    private MaterialButton mIconView;
     private LinearProgressIndicator mProgressIndicator;
     private TextView mPercentTextView;
     private LinearLayout mCenterContainer;
@@ -49,9 +46,6 @@ public class StarGestureView extends FrameLayout implements IGestureComponent {
         init();
     }
 
-    /**
-     * 初始化视图
-     */
     private void init() {
         setVisibility(GONE);
         LayoutInflater.from(getContext()).inflate(R.layout.star_gesture_view, this, true);
@@ -74,27 +68,26 @@ public class StarGestureView extends FrameLayout implements IGestureComponent {
 
     @Override
     public void onVisibilityChanged(boolean isVisible, Animation anim) {
-        // 不需要额外处理
     }
 
     @Override
     public void onPlayerStateChanged(int playerState) {
-        // 不需要处理
     }
 
     @Override
     public void onStartSlide() {
-        // 开始滑动，隐藏控制栏，显示手势反馈容器
         if (mControlWrapper != null) {
             mControlWrapper.hide();
         }
-        mCenterContainer.setVisibility(VISIBLE);
-        mCenterContainer.setAlpha(1f);
+        if (mCenterContainer != null) {
+            mCenterContainer.setVisibility(VISIBLE);
+            mCenterContainer.setAlpha(1f);
+        }
     }
 
     @Override
     public void onStopSlide() {
-        // 停止滑动，淡出隐藏手势反馈容器
+        if (mCenterContainer == null) return;
         mCenterContainer.animate()
                 .alpha(0f)
                 .setDuration(300)
@@ -102,7 +95,9 @@ public class StarGestureView extends FrameLayout implements IGestureComponent {
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         super.onAnimationEnd(animation);
-                        mCenterContainer.setVisibility(GONE);
+                        if (mCenterContainer != null) {
+                            mCenterContainer.setVisibility(GONE);
+                        }
                     }
                 })
                 .start();
@@ -110,43 +105,55 @@ public class StarGestureView extends FrameLayout implements IGestureComponent {
 
     @Override
     public void onPositionChange(int slidePosition, int currentPosition, int duration) {
-        // 进度滑动时更新图标和时间显示
-        mProgressIndicator.setVisibility(GONE);
-        if (slidePosition > currentPosition) {
-            mIconView.setImageResource(R.drawable.fast_forward); // 快进图标
-        } else {
-            mIconView.setImageResource(R.drawable.fast_rewind); // 快退图标
+        if (mProgressIndicator != null) mProgressIndicator.setVisibility(GONE);
+        if (mIconView != null) {
+            if (slidePosition > currentPosition) {
+                mIconView.setIconResource(R.drawable.fast_forward);
+            } else {
+                mIconView.setIconResource(R.drawable.fast_rewind);
+            }
         }
-        mPercentTextView.setText(String.format("%s/%s",
-                PlayerUtils.stringForTime(slidePosition),
-                PlayerUtils.stringForTime(duration)));
+        if (mPercentTextView != null) {
+            mPercentTextView.setText(String.format("%s/%s",
+                    PlayerUtils.stringForTime(slidePosition),
+                    PlayerUtils.stringForTime(duration)));
+        }
     }
 
     @Override
     public void onBrightnessChange(int percent) {
-        // 亮度调节时更新图标和百分比
-        mProgressIndicator.setVisibility(VISIBLE);
-        mIconView.setImageResource(R.drawable.brightness); // 亮度图标
-        mPercentTextView.setText(percent + "%");
-        mProgressIndicator.setProgress(percent);
+        if (mProgressIndicator != null) {
+            mProgressIndicator.setVisibility(VISIBLE);
+            mProgressIndicator.setProgress(percent);
+        }
+        if (mIconView != null) {
+            mIconView.setIconResource(R.drawable.brightness);
+        }
+        if (mPercentTextView != null) {
+            mPercentTextView.setText(percent + "%");
+        }
     }
 
     @Override
     public void onVolumeChange(int percent) {
-        // 音量调节时更新图标和百分比
-        mProgressIndicator.setVisibility(VISIBLE);
-        if (percent <= 0) {
-            mIconView.setImageResource(R.drawable.volume_off); // 静音图标
-        } else {
-            mIconView.setImageResource(R.drawable.volume_up); // 音量图标
+        if (mProgressIndicator != null) {
+            mProgressIndicator.setVisibility(VISIBLE);
+            mProgressIndicator.setProgress(percent);
         }
-        mPercentTextView.setText(percent + "%");
-        mProgressIndicator.setProgress(percent);
+        if (mIconView != null) {
+            if (percent <= 0) {
+                mIconView.setIconResource(R.drawable.volume_off);
+            } else {
+                mIconView.setIconResource(R.drawable.volume_up);
+            }
+        }
+        if (mPercentTextView != null) {
+            mPercentTextView.setText(percent + "%");
+        }
     }
 
     @Override
     public void onPlayStateChanged(int playState) {
-        // 根据播放状态控制手势视图的整体可见性
         if (playState == VideoView.STATE_IDLE
                 || playState == VideoView.STATE_START_ABORT
                 || playState == VideoView.STATE_PREPARING
@@ -161,11 +168,9 @@ public class StarGestureView extends FrameLayout implements IGestureComponent {
 
     @Override
     public void setProgress(int duration, int position) {
-        // 不需要处理
     }
 
     @Override
     public void onLockStateChanged(boolean isLocked) {
-        // 不需要处理
     }
 }

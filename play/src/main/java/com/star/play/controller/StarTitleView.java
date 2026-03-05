@@ -15,6 +15,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.google.android.material.button.MaterialButton;
 import com.star.play.R;
 
 import xyz.doikki.videoplayer.controller.ControlWrapper;
@@ -22,29 +23,16 @@ import xyz.doikki.videoplayer.controller.IControlComponent;
 import xyz.doikki.videoplayer.player.VideoView;
 import xyz.doikki.videoplayer.util.PlayerUtils;
 
-/**
- * StarTitleView
- * 顶部标题控制组件（用于 DKPlayer）
- * 功能：
- * 1. 显示视频标题
- * 2. 显示系统时间
- * 3. 提供：
- *    - 返回按钮（退出全屏）
- *    - 小窗按钮（PIP）
- *    - 投屏按钮
- *    - 设置按钮
- * 仅在 全屏状态 下显示
- */
 public class StarTitleView extends FrameLayout implements IControlComponent {
 
     private ControlWrapper mControlWrapper;
 
     private TextView mTitleView;
     private TextView mSysTimeView;
-    private ImageView mBackView;
-    private ImageView mPipView;
-    private ImageView mScreenView;
-    private ImageView mSettingsView;
+    private MaterialButton mBackView;
+    private MaterialButton mPipView;
+    private MaterialButton mScreenView;
+    private MaterialButton mSettingsView;
     private LinearLayout mTitleContainer;
 
     private OnPipClickListener mOnPipClickListener;
@@ -78,35 +66,43 @@ public class StarTitleView extends FrameLayout implements IControlComponent {
         mTitleContainer = findViewById(R.id.title_container);
 
         mBackView = findViewById(R.id.back);
-        mBackView.setOnClickListener(view -> {
-            if (mControlWrapper == null) return;
-            Activity activity = PlayerUtils.scanForActivity(getContext());
-            if (activity != null && mControlWrapper.isFullScreen()) {
-                activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-                mControlWrapper.stopFullScreen();
-            }
-        });
+        if (mBackView != null) {
+            mBackView.setOnClickListener(view -> {
+                if (mControlWrapper == null) return;
+                Activity activity = PlayerUtils.scanForActivity(getContext());
+                if (activity != null && mControlWrapper.isFullScreen()) {
+                    activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                    mControlWrapper.stopFullScreen();
+                }
+            });
+        }
 
         mTitleView = findViewById(R.id.title);
         mSysTimeView = findViewById(R.id.sys_time);
 
         mPipView = findViewById(R.id.pip);
-        mPipView.setOnClickListener(view -> {
-            if (mOnPipClickListener != null)
-                mOnPipClickListener.onPipClick(view);
-        });
+        if (mPipView != null) {
+            mPipView.setOnClickListener(view -> {
+                if (mOnPipClickListener != null)
+                    mOnPipClickListener.onPipClick(view);
+            });
+        }
 
         mScreenView = findViewById(R.id.screen);
-        mScreenView.setOnClickListener(view -> {
-            if (mOnScreenClickListener != null)
-                mOnScreenClickListener.onScreenClick(view);
-        });
+        if (mScreenView != null) {
+            mScreenView.setOnClickListener(view -> {
+                if (mOnScreenClickListener != null)
+                    mOnScreenClickListener.onScreenClick(view);
+            });
+        }
 
         mSettingsView = findViewById(R.id.settings);
-        mSettingsView.setOnClickListener(view -> {
-            if (mOnSettingsClickListener != null)
-                mOnSettingsClickListener.onSettingsClick(view);
-        });
+        if (mSettingsView != null) {
+            mSettingsView.setOnClickListener(view -> {
+                if (mOnSettingsClickListener != null)
+                    mOnSettingsClickListener.onSettingsClick(view);
+            });
+        }
     }
 
     public interface OnPipClickListener {
@@ -153,10 +149,13 @@ public class StarTitleView extends FrameLayout implements IControlComponent {
     @Override
     public void onVisibilityChanged(boolean isVisible, Animation anim) {
         if (mControlWrapper == null || !mControlWrapper.isFullScreen()) return;
+        if (mControlWrapper.isLocked()) return;
 
         if (isVisible) {
             if (getVisibility() == GONE) {
-                mSysTimeView.setText(PlayerUtils.getCurrentSystemTime());
+                if (mSysTimeView != null) {
+                    mSysTimeView.setText(PlayerUtils.getCurrentSystemTime());
+                }
                 setVisibility(VISIBLE);
                 if (anim != null) startAnimation(anim);
             }
@@ -173,11 +172,16 @@ public class StarTitleView extends FrameLayout implements IControlComponent {
         switch (playState) {
             case VideoView.STATE_IDLE:
             case VideoView.STATE_START_ABORT:
-            case VideoView.STATE_PREPARING:
-            case VideoView.STATE_PREPARED:
             case VideoView.STATE_ERROR:
             case VideoView.STATE_PLAYBACK_COMPLETED:
                 setVisibility(GONE);
+                break;
+            case VideoView.STATE_PREPARING:
+                if (mControlWrapper != null && mControlWrapper.isFullScreen()) {
+                    setVisibility(VISIBLE);
+                } else {
+                    setVisibility(GONE);
+                }
                 break;
         }
     }
@@ -187,18 +191,18 @@ public class StarTitleView extends FrameLayout implements IControlComponent {
         if (mControlWrapper == null) return;
 
         if (playerState == VideoView.PLAYER_FULL_SCREEN) {
-            if (mControlWrapper.isShowing() && !mControlWrapper.isLocked()) {
-                setVisibility(VISIBLE);
+            setVisibility(VISIBLE);
+            if (mSysTimeView != null) {
                 mSysTimeView.setText(PlayerUtils.getCurrentSystemTime());
             }
-            mTitleView.setSelected(true);
+            if (mTitleView != null) mTitleView.setSelected(true);
         } else {
             setVisibility(GONE);
-            mTitleView.setSelected(false);
+            if (mTitleView != null) mTitleView.setSelected(false);
         }
 
         Activity activity = PlayerUtils.scanForActivity(getContext());
-        if (activity != null && mControlWrapper.hasCutout()) {
+        if (activity != null && mControlWrapper.hasCutout() && mTitleContainer != null) {
             int orientation = activity.getRequestedOrientation();
             int cutoutHeight = mControlWrapper.getCutoutHeight();
 
@@ -222,7 +226,9 @@ public class StarTitleView extends FrameLayout implements IControlComponent {
         } else {
             if (mControlWrapper != null && mControlWrapper.isFullScreen()) {
                 setVisibility(VISIBLE);
-                mSysTimeView.setText(PlayerUtils.getCurrentSystemTime());
+                if (mSysTimeView != null) {
+                    mSysTimeView.setText(PlayerUtils.getCurrentSystemTime());
+                }
             }
         }
     }

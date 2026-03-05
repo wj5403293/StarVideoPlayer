@@ -4,10 +4,10 @@
 
 ## 功能特性
 
-- **双内核支持** - 支持 IJKPlayer 和 ExoPlayer 两种播放内核
-- **选集功能** - 剧集列表展示与快速切换
+- **双内核支持** - 支持 IJKPlayer 和 ExoPlayer 两种播放内核，可在设置中切换
+- **选集功能** - 剧集列表展示与快速切换，支持自定义适配器
 - **倍速播放** - 支持多档倍速（0.5x、0.75x、1.0x、1.25x、1.5x、2.0x）
-- **长按倍速** - 长按屏幕快速播放（默认2倍速，可自定义）
+- **长按倍速** - 长按屏幕快速播放（默认3倍速，可自定义1.0x~10.0x）
 - **定时关闭** - 支持30分钟、60分钟定时关闭
 - **跳过片头/片尾** - 自动跳过指定时间段
 - **画面比例调整** - 支持16:9、4:3、默认、填充、缩放、裁剪等模式
@@ -17,6 +17,8 @@
 - **投屏功能接口** - 预留投屏回调接口
 - **刘海屏适配** - 完美适配刘海屏设备
 - **锁屏功能** - 全屏模式下可锁定控制栏
+- **隐藏进度条** - 可选择隐藏底部进度条
+- **自动旋转** - 支持根据设备方向自动切换横竖屏
 
 ## 引入方式
 
@@ -122,6 +124,8 @@ public class MainActivity extends AppCompatActivity {
 
 ### 4. 选集功能
 
+#### 方式一：使用默认适配器
+
 ```java
 // 设置剧集列表
 List<String> episodes = Arrays.asList("第1集", "第2集", "第3集", "第4集");
@@ -133,12 +137,28 @@ videoView.setOnEpisodeSelectListener((index, title) -> {
     videoView.setUrl(getEpisodeUrl(index));
     videoView.start();
 });
+```
 
-// 上一集/下一集
+#### 方式二：使用自定义适配器
+
+```java
+// 创建自定义适配器
+MyEpisodeAdapter adapter = new MyEpisodeAdapter(episodeList);
+videoView.setEpisodeAdapter(adapter);
+
+// 如果需要获取 RecyclerView 进行更多操作
+RecyclerView recyclerView = videoView.getEpisodeRecyclerView();
+```
+
+#### 上一集/下一集
+
+```java
+// 上一集
 videoView.setOnUpSetClickListener(view -> {
     // 处理上一集逻辑
 });
 
+// 下一集
 videoView.setOnDownSetClickListener(view -> {
     // 处理下一集逻辑
 });
@@ -158,11 +178,41 @@ videoView.setOnScreenClickListener(view -> {
 });
 
 // 设置跳过片头片尾（秒）
-videoView.setSkipOpening(30);   // 跳过片头30秒
-videoView.setSkipEnding(60);    // 跳过片尾60秒
+videoView.setSkipStartTime(30);   // 跳过片头30秒
+videoView.setSkipEndTime(60);     // 跳过片尾60秒
 
-// 设置标题
-videoView.setTitle("视频标题");
+// 设置长按倍速
+videoView.setLongPressSpeed(3.0f);  // 长按时3倍速播放
+
+// 设置播放速度
+videoView.setPlaybackSpeed(1.5f);   // 1.5倍速播放
+
+// 设置静音
+videoView.setMuted(true);
+
+// 设置画面比例
+videoView.setScreenScale(VideoView.SCREEN_SCALE_16_9);
+
+// 隐藏底部进度条
+videoView.setHideProgress(true);
+
+// 开启自动旋转
+videoView.setAutoRotate(true);
+
+// 设置播放内核
+videoView.setPlayerKernel("ExoPlayer");  // 或 "IJKPlayer"
+
+// 监听播放内核切换
+videoView.setOnPlayerKernelChangeListener(kernel -> {
+    // 内核切换，需要重新设置播放源并开始播放
+    videoView.setPlayerFactory(
+        "ExoPlayer".equals(kernel) 
+            ? ExoMediaPlayerFactory.create() 
+            : IjkPlayerFactory.create()
+    );
+    videoView.setUrl(currentUrl);
+    videoView.start();
+});
 ```
 
 ## API 说明
@@ -174,9 +224,20 @@ videoView.setTitle("视频标题");
 | `setUrl(String url)` | 设置视频地址 |
 | `setPlayerFactory(PlayerFactory factory)` | 设置播放内核 |
 | `setTitle(String title)` | 设置视频标题 |
-| `setEpisodes(List<String> episodes, int currentIndex)` | 设置剧集列表 |
-| `setSkipOpening(int seconds)` | 设置跳过片头时间 |
-| `setSkipEnding(int seconds)` | 设置跳过片尾时间 |
+| `setEpisodes(List<String> episodes, int currentIndex)` | 设置剧集列表（使用默认适配器） |
+| `setEpisodeAdapter(RecyclerView.Adapter<?> adapter)` | 设置自定义选集适配器 |
+| `getEpisodeAdapter()` | 获取当前选集适配器 |
+| `getEpisodeRecyclerView()` | 获取选集 RecyclerView |
+| `setSkipStartTime(int seconds)` | 设置跳过片头时间 |
+| `setSkipEndTime(int seconds)` | 设置跳过片尾时间 |
+| `setLongPressSpeed(float speed)` | 设置长按倍速 |
+| `setPlaybackSpeed(float speed)` | 设置播放速度 |
+| `setMuted(boolean mute)` | 设置静音 |
+| `setScreenScale(int scaleType)` | 设置画面比例 |
+| `setHideProgress(boolean hide)` | 设置是否隐藏底部进度条 |
+| `setAutoRotate(boolean autoRotate)` | 设置是否开启自动旋转 |
+| `setPlayerKernel(String kernel)` | 设置播放内核（"ExoPlayer" 或 "IJKPlayer"） |
+| `getPlayerKernel()` | 获取当前播放内核 |
 | `addDefaultControlComponent(String title, boolean isLive)` | 添加默认控制器 |
 | `start()` | 开始播放 |
 | `pause()` | 暂停播放 |
@@ -194,6 +255,18 @@ videoView.setTitle("视频标题");
 | `setOnUpSetClickListener(OnUpSetClickListener listener)` | 上一集点击监听 |
 | `setOnDownSetClickListener(OnDownSetClickListener listener)` | 下一集点击监听 |
 | `setOnEpisodeSelectListener(OnEpisodeSelectListener listener)` | 选集选中监听 |
+| `setOnPlayerKernelChangeListener(OnPlayerKernelChangeListener listener)` | 播放内核切换监听 |
+
+### 画面比例常量
+
+| 常量 | 说明 |
+|------|------|
+| `SCREEN_SCALE_DEFAULT` | 默认比例 |
+| `SCREEN_SCALE_16_9` | 16:9 比例 |
+| `SCREEN_SCALE_4_3` | 4:3 比例 |
+| `SCREEN_SCALE_FIT_PARENT` | 填充父容器 |
+| `SCREEN_SCALE_ORIGINAL` | 原始尺寸 |
+| `SCREEN_SCALE_CENTER_CROP` | 居中裁剪 |
 
 ## 混淆配置
 

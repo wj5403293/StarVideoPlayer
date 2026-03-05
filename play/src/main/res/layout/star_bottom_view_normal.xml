@@ -35,11 +35,11 @@
             app:layout_constraintTop_toTopOf="@+id/curr_time" />
 
         <com.google.android.material.button.MaterialButton
-            style="?attr/materialIconButtonStyle"
+            style="?attr/materialIconButtonFilledTonalStyle"
+            app:iconTint="?attr/colorPrimary"
             android:id="@+id/skip_previous"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            app:iconTint="#ffffff"
             android:visibility="gone"
             app:icon="@drawable/skip_previous"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -48,22 +48,22 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/play"
-            style="?attr/materialIconButtonStyle"
+            style="?attr/materialIconButtonFilledTonalStyle"
+            app:iconTint="?attr/colorPrimary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:icon="@drawable/play_arrow"
-            app:iconTint="#ffffff"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/skip_previous"
             app:layout_constraintTop_toBottomOf="@+id/curr_time" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/skip_next"
-            style="?attr/materialIconButtonStyle"
+            style="?attr/materialIconButtonFilledTonalStyle"
+            app:iconTint="?attr/colorPrimary"
             android:layout_width="40dp"
             android:layout_height="40dp"
             app:icon="@drawable/skip_next"
-            app:iconTint="#ffffff"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/play"
             app:layout_constraintStart_toEndOf="@+id/play"
@@ -82,11 +82,11 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/speed"
-            style="?attr/materialIconButtonStyle"
+            style="?attr/materialIconButtonFilledTonalStyle"
+            app:iconTint="?attr/colorPrimary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:icon="@drawable/speed"
-            app:iconTint="#ffffff"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/play"
             app:layout_constraintEnd_toStartOf="@+id/selected_writings"
@@ -94,23 +94,23 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/selected_writings"
-            style="?attr/materialIconButtonStyle"
+            style="?attr/materialIconButtonFilledTonalStyle"
+            app:iconTint="?attr/colorPrimary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:icon="@drawable/animated_images"
             android:visibility="gone"
-            app:iconTint="#ffffff"
             app:layout_constraintBottom_toBottomOf="@+id/play"
             app:layout_constraintEnd_toStartOf="@+id/fullscreen"
             app:layout_constraintTop_toTopOf="@+id/play" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/fullscreen"
-            style="?attr/materialIconButtonStyle"
+            style="?attr/materialIconButtonFilledTonalStyle"
+            app:iconTint="?attr/colorPrimary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:icon="@drawable/fullscreen"
-            app:iconTint="#ffffff"
             app:layout_constraintBottom_toBottomOf="@+id/play"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/play" />

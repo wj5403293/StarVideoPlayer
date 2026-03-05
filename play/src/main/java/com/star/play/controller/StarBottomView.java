@@ -37,9 +37,11 @@ public class StarBottomView extends FrameLayout implements IControlComponent {
     private MaterialButton mFullscreenView;
     private Slider mSeekBar;
     private ProgressBar mBottomProgress;
+    private View mPlayButtonsContainer;
 
     private boolean mIsDragging;
     private boolean mIsShowBottomProgress = true;
+    private boolean mIsFullScreen = false;
 
     private OnSelectClickListener mOnSelectClickListener;
     private OnSpeedClickListener mOnSpeedClickListener;
@@ -66,6 +68,9 @@ public class StarBottomView extends FrameLayout implements IControlComponent {
         setVisibility(GONE);
         LayoutInflater.from(getContext()).inflate(R.layout.star_bottom_view, this, true);
         mBottomProgress = findViewById(R.id.bottom_progress);
+        if (mBottomProgress != null) {
+            mBottomProgress.setMax(1000);
+        }
         showNormalLayout();
     }
 
@@ -79,7 +84,9 @@ public class StarBottomView extends FrameLayout implements IControlComponent {
         mCurrentLayout = normalLayout;
 
         bindViews(mCurrentLayout);
-        mFullscreenView.setIconResource(R.drawable.fullscreen);
+        if (mFullscreenView != null) {
+            mFullscreenView.setIconResource(R.drawable.fullscreen);
+        }
     }
 
     private void showFullscreenLayout() {
@@ -92,7 +99,9 @@ public class StarBottomView extends FrameLayout implements IControlComponent {
         mCurrentLayout = fullscreenLayout;
 
         bindViews(mCurrentLayout);
-        mFullscreenView.setIconResource(R.drawable.fullscreen_exit);
+        if (mFullscreenView != null) {
+            mFullscreenView.setIconResource(R.drawable.fullscreen_exit);
+        }
     }
 
     private void bindViews(View root) {
@@ -105,9 +114,12 @@ public class StarBottomView extends FrameLayout implements IControlComponent {
         mSpeedView = root.findViewById(R.id.speed);
         mSelectedWritingsView = root.findViewById(R.id.selected_writings);
         mFullscreenView = root.findViewById(R.id.fullscreen);
+        mPlayButtonsContainer = root.findViewById(R.id.play_buttons_container);
 
-        mSeekBar.setValueFrom(0f);
-        mSeekBar.setValueTo(1000f);
+        if (mSeekBar != null) {
+            mSeekBar.setValueFrom(0f);
+            mSeekBar.setValueTo(1000f);
+        }
 
         setupClickListeners();
         setupSeekBarListener();
@@ -127,30 +139,44 @@ public class StarBottomView extends FrameLayout implements IControlComponent {
     }
 
     private void setupClickListeners() {
-        mPlayView.setOnClickListener(v -> {
-            if (mControlWrapper != null) mControlWrapper.togglePlay();
-        });
+        if (mPlayView != null) {
+            mPlayView.setOnClickListener(v -> {
+                if (mControlWrapper != null) mControlWrapper.togglePlay();
+            });
+        }
 
-        mSkipPreviousView.setOnClickListener(v -> {
-            if (mOnUpSetClickListener != null) mOnUpSetClickListener.onClick(v);
-        });
+        if (mSkipPreviousView != null) {
+            mSkipPreviousView.setOnClickListener(v -> {
+                if (mOnUpSetClickListener != null) mOnUpSetClickListener.onClick(v);
+            });
+        }
 
-        mSkipNextView.setOnClickListener(v -> {
-            if (mOnDownSetClickListener != null) mOnDownSetClickListener.onClick(v);
-        });
+        if (mSkipNextView != null) {
+            mSkipNextView.setOnClickListener(v -> {
+                if (mOnDownSetClickListener != null) mOnDownSetClickListener.onClick(v);
+            });
+        }
 
-        mSpeedView.setOnClickListener(v -> {
-            if (mOnSpeedClickListener != null) mOnSpeedClickListener.onClick(v);
-        });
+        if (mSpeedView != null) {
+            mSpeedView.setOnClickListener(v -> {
+                if (mOnSpeedClickListener != null) mOnSpeedClickListener.onClick(v);
+            });
+        }
 
-        mSelectedWritingsView.setOnClickListener(v -> {
-            if (mOnSelectClickListener != null) mOnSelectClickListener.onClick(v);
-        });
+        if (mSelectedWritingsView != null) {
+            mSelectedWritingsView.setOnClickListener(v -> {
+                if (mOnSelectClickListener != null) mOnSelectClickListener.onClick(v);
+            });
+        }
 
-        mFullscreenView.setOnClickListener(v -> toggleFullScreen());
+        if (mFullscreenView != null) {
+            mFullscreenView.setOnClickListener(v -> toggleFullScreen());
+        }
     }
 
     private void setupSeekBarListener() {
+        if (mSeekBar == null) return;
+
         mSeekBar.addOnSliderTouchListener(new Slider.OnSliderTouchListener() {
             @Override
             public void onStartTrackingTouch(@NonNull Slider slider) {
@@ -175,7 +201,7 @@ public class StarBottomView extends FrameLayout implements IControlComponent {
         });
 
         mSeekBar.addOnChangeListener((slider, value, fromUser) -> {
-            if (fromUser && mControlWrapper != null) {
+            if (fromUser && mControlWrapper != null && mCurrTimeView != null) {
                 long duration = mControlWrapper.getDuration();
                 long seekPos = (long) (duration * value / 1000f);
                 mCurrTimeView.setText(PlayerUtils.stringForTime((int) seekPos));
@@ -231,9 +257,13 @@ public class StarBottomView extends FrameLayout implements IControlComponent {
 
     public void showBottomProgress(boolean isShow) {
         mIsShowBottomProgress = isShow;
-        if (!isShow) {
+        if (!isShow && mBottomProgress != null) {
             mBottomProgress.setVisibility(GONE);
         }
+    }
+
+    public void setShowBottomProgress(boolean isShow) {
+        showBottomProgress(isShow);
     }
 
     @Override
@@ -249,24 +279,38 @@ public class StarBottomView extends FrameLayout implements IControlComponent {
 
     @Override
     public void onVisibilityChanged(boolean isVisible, Animation anim) {
+        if (mCurrentLayout == null) return;
+
         if (isVisible) {
             mCurrentLayout.setVisibility(VISIBLE);
             if (anim != null) {
                 mCurrentLayout.startAnimation(anim);
             }
-            if (mIsShowBottomProgress) {
+            if (mIsShowBottomProgress && mBottomProgress != null) {
                 mBottomProgress.setVisibility(GONE);
+            }
+            if (mIsFullScreen && mPlayButtonsContainer != null) {
+                mPlayButtonsContainer.setVisibility(VISIBLE);
+                if (anim != null) {
+                    mPlayButtonsContainer.startAnimation(anim);
+                }
             }
         } else {
             mCurrentLayout.setVisibility(GONE);
             if (anim != null) {
                 mCurrentLayout.startAnimation(anim);
             }
-            if (mIsShowBottomProgress) {
+            if (mIsShowBottomProgress && mBottomProgress != null) {
                 mBottomProgress.setVisibility(VISIBLE);
                 AlphaAnimation fadeIn = new AlphaAnimation(0f, 1f);
                 fadeIn.setDuration(300);
                 mBottomProgress.startAnimation(fadeIn);
+            }
+            if (mIsFullScreen && mPlayButtonsContainer != null) {
+                mPlayButtonsContainer.setVisibility(GONE);
+                if (anim != null) {
+                    mPlayButtonsContainer.startAnimation(anim);
+                }
             }
         }
     }
@@ -277,44 +321,80 @@ public class StarBottomView extends FrameLayout implements IControlComponent {
             case VideoView.STATE_IDLE:
             case VideoView.STATE_PLAYBACK_COMPLETED:
                 setVisibility(GONE);
-                mBottomProgress.setProgress(0);
-                mBottomProgress.setSecondaryProgress(0);
-                mSeekBar.setValue(0);
+                if (mBottomProgress != null) {
+                    mBottomProgress.setProgress(0);
+                    mBottomProgress.setSecondaryProgress(0);
+                }
+                if (mSeekBar != null) mSeekBar.setValue(0);
+                if (mPlayView != null) mPlayView.setIconResource(R.drawable.play_arrow);
                 break;
             case VideoView.STATE_START_ABORT:
-            case VideoView.STATE_PREPARING:
-            case VideoView.STATE_PREPARED:
             case VideoView.STATE_ERROR:
                 setVisibility(GONE);
+                if (mPlayView != null) mPlayView.setIconResource(R.drawable.play_arrow);
                 break;
-            case VideoView.STATE_PLAYING:
-                mPlayView.setIconResource(R.drawable.pause);
-                if (mIsShowBottomProgress) {
-                    if (mControlWrapper != null && mControlWrapper.isShowing()) {
-                        mBottomProgress.setVisibility(GONE);
-                        mCurrentLayout.setVisibility(VISIBLE);
-                    } else {
-                        mBottomProgress.setVisibility(VISIBLE);
-                        mCurrentLayout.setVisibility(VISIBLE);
+            case VideoView.STATE_PREPARING:
+                if (mPlayView != null) mPlayView.setIconResource(R.drawable.pause);
+                if (mIsFullScreen) {
+                    setVisibility(VISIBLE);
+                    if (mCurrentLayout != null) mCurrentLayout.setVisibility(VISIBLE);
+                    if (mPlayButtonsContainer != null) {
+                        mPlayButtonsContainer.setVisibility(VISIBLE);
                     }
                 } else {
-                    mCurrentLayout.setVisibility(GONE);
+                    setVisibility(GONE);
                 }
-                setVisibility(VISIBLE);
-                mControlWrapper.startProgress();
+                break;
+            case VideoView.STATE_PREPARED:
+                if (mPlayView != null) mPlayView.setIconResource(R.drawable.play_arrow);
+                if (mIsFullScreen) {
+                    setVisibility(VISIBLE);
+                    if (mCurrentLayout != null) mCurrentLayout.setVisibility(VISIBLE);
+                    if (mPlayButtonsContainer != null) {
+                        mPlayButtonsContainer.setVisibility(VISIBLE);
+                    }
+                }
+                break;
+            case VideoView.STATE_PLAYING:
+                if (mPlayView != null) mPlayView.setIconResource(R.drawable.pause);
+                if (mIsFullScreen) {
+                    setVisibility(VISIBLE);
+                    if (mCurrentLayout != null) mCurrentLayout.setVisibility(VISIBLE);
+                    if (mPlayButtonsContainer != null) {
+                        mPlayButtonsContainer.setVisibility(VISIBLE);
+                    }
+                    if (mIsShowBottomProgress && mBottomProgress != null) {
+                        mBottomProgress.setVisibility(GONE);
+                    }
+                } else {
+                    if (mIsShowBottomProgress) {
+                        if (mControlWrapper != null && mControlWrapper.isShowing()) {
+                            if (mBottomProgress != null) mBottomProgress.setVisibility(GONE);
+                            if (mCurrentLayout != null) mCurrentLayout.setVisibility(VISIBLE);
+                        } else {
+                            if (mBottomProgress != null) mBottomProgress.setVisibility(VISIBLE);
+                            if (mCurrentLayout != null) mCurrentLayout.setVisibility(VISIBLE);
+                        }
+                    } else {
+                        if (mCurrentLayout != null) mCurrentLayout.setVisibility(GONE);
+                    }
+                    setVisibility(VISIBLE);
+                }
+                if (mControlWrapper != null) mControlWrapper.startProgress();
                 break;
             case VideoView.STATE_PAUSED:
-                mPlayView.setIconResource(R.drawable.play_arrow);
+                if (mPlayView != null) mPlayView.setIconResource(R.drawable.play_arrow);
                 break;
             case VideoView.STATE_BUFFERING:
-                mPlayView.setIconResource(mControlWrapper != null && mControlWrapper.isPlaying() ?
-                        R.drawable.pause : R.drawable.play_arrow);
-                mControlWrapper.stopProgress();
+                if (mPlayView != null) mPlayView.setIconResource(R.drawable.pause);
+                if (mControlWrapper != null) mControlWrapper.stopProgress();
                 break;
             case VideoView.STATE_BUFFERED:
-                mPlayView.setIconResource(mControlWrapper != null && mControlWrapper.isPlaying() ?
-                        R.drawable.pause : R.drawable.play_arrow);
-                mControlWrapper.startProgress();
+                if (mPlayView != null) {
+                    mPlayView.setIconResource(mControlWrapper != null && mControlWrapper.isPlaying() ?
+                            R.drawable.pause : R.drawable.play_arrow);
+                }
+                if (mControlWrapper != null) mControlWrapper.startProgress();
                 break;
         }
     }
@@ -322,8 +402,16 @@ public class StarBottomView extends FrameLayout implements IControlComponent {
     @Override
     public void onPlayerStateChanged(int playerState) {
         if (playerState == VideoView.PLAYER_FULL_SCREEN) {
+            mIsFullScreen = true;
             showFullscreenLayout();
+            if (mControlWrapper != null && mControlWrapper.isShowing() && mPlayButtonsContainer != null) {
+                mPlayButtonsContainer.setVisibility(VISIBLE);
+            }
         } else {
+            mIsFullScreen = false;
+            if (mPlayButtonsContainer != null) {
+                mPlayButtonsContainer.setVisibility(GONE);
+            }
             showNormalLayout();
         }
     }
@@ -338,23 +426,29 @@ public class StarBottomView extends FrameLayout implements IControlComponent {
 
         if (duration > 0) {
             float progress = (float) position / duration * 1000;
-            mSeekBar.setValue(progress);
-            mBottomProgress.setProgress((int) progress);
+            if (mSeekBar != null) mSeekBar.setValue(progress);
+            if (mBottomProgress != null) mBottomProgress.setProgress((int) progress);
 
-            int bufferedPercent = mControlWrapper.getBufferedPercentage();
-            if (bufferedPercent >= 95) {
-                mBottomProgress.setSecondaryProgress(mBottomProgress.getMax());
-            } else {
-                mBottomProgress.setSecondaryProgress(bufferedPercent * 10);
+            if (mControlWrapper != null) {
+                int bufferedPercent = mControlWrapper.getBufferedPercentage();
+                if (mBottomProgress != null) {
+                    if (bufferedPercent >= 95) {
+                        mBottomProgress.setSecondaryProgress(mBottomProgress.getMax());
+                    } else {
+                        mBottomProgress.setSecondaryProgress(bufferedPercent * 10);
+                    }
+                }
             }
         } else {
-            mSeekBar.setValue(0);
-            mBottomProgress.setProgress(0);
-            mBottomProgress.setSecondaryProgress(0);
+            if (mSeekBar != null) mSeekBar.setValue(0);
+            if (mBottomProgress != null) {
+                mBottomProgress.setProgress(0);
+                mBottomProgress.setSecondaryProgress(0);
+            }
         }
 
-        mTotalTimeView.setText(PlayerUtils.stringForTime(duration));
-        mCurrTimeView.setText(PlayerUtils.stringForTime(position));
+        if (mTotalTimeView != null) mTotalTimeView.setText(PlayerUtils.stringForTime(duration));
+        if (mCurrTimeView != null) mCurrTimeView.setText(PlayerUtils.stringForTime(position));
     }
 
     @Override

@@ -14,14 +14,13 @@
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
-        <ImageView
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/back"
-            android:layout_width="46dp"
-            android:layout_height="46dp"
-            android:layout_gravity="center"
-            android:padding="8dp"
-            android:src="@drawable/arrow_back"
-            app:tint="@android:color/white" />
+            style="?attr/materialIconButtonFilledTonalStyle"
+            app:iconTint="?attr/colorPrimary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:icon="@drawable/arrow_back"/>
 
         <TextView
             android:id="@+id/title"
@@ -37,32 +36,34 @@
             android:textSize="16sp"
             tools:text="这是一个标题" />
 
-        <ImageView
+        <com.google.android.material.button.MaterialButton
+            style="?attr/materialIconButtonFilledTonalStyle"
+            app:iconTint="?attr/colorPrimary"
             android:id="@+id/pip"
-            android:layout_width="50dp"
-            android:layout_height="match_parent"
-            android:src="@drawable/picture_in_picture"
-            app:tint="@android:color/white"
-            android:padding="10dp"/>
-        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:icon="@drawable/picture_in_picture"/>
+        <com.google.android.material.button.MaterialButton
+            style="?attr/materialIconButtonFilledTonalStyle"
+            app:iconTint="?attr/colorPrimary"
             android:id="@+id/screen"
-            android:layout_width="50dp"
-            android:layout_height="match_parent"
-            android:src="@drawable/airplay"
-            app:tint="@android:color/white"
-            android:padding="10dp"/>
-        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:icon="@drawable/airplay"/>
+        <com.google.android.material.button.MaterialButton
+            style="?attr/materialIconButtonFilledTonalStyle"
+            app:iconTint="?attr/colorPrimary"
             android:id="@+id/settings"
-            android:layout_width="50dp"
-            android:layout_height="match_parent"
-            android:src="@drawable/settings"
-            app:tint="@android:color/white"
-            android:padding="10dp"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:icon="@drawable/settings"/>
 
         <TextView
             android:id="@+id/sys_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:layout_marginLeft="14dp"
             android:layout_marginEnd="14dp"
             android:layout_marginRight="14dp"
             android:textColor="@android:color/white"

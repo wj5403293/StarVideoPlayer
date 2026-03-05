@@ -40,8 +40,17 @@ public class StarSettingsView extends FrameLayout implements IControlComponent {
     // 画面比例
     private ChipGroup mChipGroupScale;
 
+    // 播放内核
+    private ChipGroup mChipGroupPlayer;
+
     // 静音开关
     private MaterialSwitch mMuteSwitch;
+
+    // 隐藏进度条
+    private MaterialSwitch mHideProgressSwitch;
+
+    // 自动旋转
+    private MaterialSwitch mAutoRotateSwitch;
 
     // 定时关闭
     private MaterialButton mBtnTiming;
@@ -70,6 +79,18 @@ public class StarSettingsView extends FrameLayout implements IControlComponent {
         void onMuteChanged(boolean isMute);
     }
 
+    public interface OnPlayerKernelChangeListener {
+        void onPlayerKernelChanged(String kernel);
+    }
+
+    public interface OnHideProgressChangeListener {
+        void onHideProgressChanged(boolean isHide);
+    }
+
+    public interface OnAutoRotateChangeListener {
+        void onAutoRotateChanged(boolean isAutoRotate);
+    }
+
     // 定时关闭选项选中监听器
     public interface OnTimingOptionSelectedListener {
         void onTimingOptionSelected(String option); // option: "不启用", "播完当前", "30分钟", "60分钟"
@@ -89,6 +110,9 @@ public class StarSettingsView extends FrameLayout implements IControlComponent {
 
     private OnScaleChangeListener mOnScaleChangeListener;
     private OnMuteChangeListener mOnMuteChangeListener;
+    private OnPlayerKernelChangeListener mOnPlayerKernelChangeListener;
+    private OnHideProgressChangeListener mOnHideProgressChangeListener;
+    private OnAutoRotateChangeListener mOnAutoRotateChangeListener;
     private OnTimingOptionSelectedListener mOnTimingOptionSelectedListener;
     private OnLongPressSpeedChangeListener mOnLongPressSpeedChangeListener;
     private OnSkipStartChangeListener mOnSkipStartChangeListener;
@@ -101,6 +125,18 @@ public class StarSettingsView extends FrameLayout implements IControlComponent {
 
     public void setOnMuteChangeListener(OnMuteChangeListener l) {
         mOnMuteChangeListener = l;
+    }
+
+    public void setOnPlayerKernelChangeListener(OnPlayerKernelChangeListener l) {
+        mOnPlayerKernelChangeListener = l;
+    }
+
+    public void setOnHideProgressChangeListener(OnHideProgressChangeListener l) {
+        mOnHideProgressChangeListener = l;
+    }
+
+    public void setOnAutoRotateChangeListener(OnAutoRotateChangeListener l) {
+        mOnAutoRotateChangeListener = l;
     }
 
     public void setOnTimingOptionSelectedListener(OnTimingOptionSelectedListener l) {
@@ -144,8 +180,14 @@ public class StarSettingsView extends FrameLayout implements IControlComponent {
 
         // 画面比例 ChipGroup
         mChipGroupScale = findViewById(R.id.chipGroup);
+        // 播放内核 ChipGroup
+        mChipGroupPlayer = findViewById(R.id.chipGroupPlayer);
         // 静音开关
         mMuteSwitch = findViewById(R.id.switch_mute);
+        // 隐藏进度条
+        mHideProgressSwitch = findViewById(R.id.switch_hide_progress);
+        // 自动旋转
+        mAutoRotateSwitch = findViewById(R.id.switch_auto_rotate);
         // 定时关闭按钮
         mBtnTiming = findViewById(R.id.btn_timing);
         // 长按倍速
@@ -188,6 +230,7 @@ public class StarSettingsView extends FrameLayout implements IControlComponent {
             if (checkedIds.isEmpty()) return;
             int id = checkedIds.get(0);
             Chip chip = findViewById(id);
+            if (chip == null) return;
             String text = chip.getText().toString();
             int scaleType = mapScaleTextToType(text);
             if (mOnScaleChangeListener != null) {
@@ -195,10 +238,36 @@ public class StarSettingsView extends FrameLayout implements IControlComponent {
             }
         });
 
+        // 播放内核选择
+        mChipGroupPlayer.setOnCheckedStateChangeListener((group, checkedIds) -> {
+            if (checkedIds.isEmpty()) return;
+            int id = checkedIds.get(0);
+            Chip chip = findViewById(id);
+            if (chip == null) return;
+            String kernel = chip.getText().toString();
+            if (mOnPlayerKernelChangeListener != null) {
+                mOnPlayerKernelChangeListener.onPlayerKernelChanged(kernel);
+            }
+        });
+
         // 静音开关
         mMuteSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (mOnMuteChangeListener != null) {
                 mOnMuteChangeListener.onMuteChanged(isChecked);
+            }
+        });
+
+        // 隐藏进度条开关
+        mHideProgressSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (mOnHideProgressChangeListener != null) {
+                mOnHideProgressChangeListener.onHideProgressChanged(isChecked);
+            }
+        });
+
+        // 自动旋转开关
+        mAutoRotateSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (mOnAutoRotateChangeListener != null) {
+                mOnAutoRotateChangeListener.onAutoRotateChanged(isChecked);
             }
         });
 
@@ -282,8 +351,29 @@ public class StarSettingsView extends FrameLayout implements IControlComponent {
         }
     }
 
+    public void setPlayerKernel(String kernel) {
+        for (int i = 0; i < mChipGroupPlayer.getChildCount(); i++) {
+            View child = mChipGroupPlayer.getChildAt(i);
+            if (child instanceof Chip) {
+                Chip chip = (Chip) child;
+                if (chip.getText().toString().equals(kernel)) {
+                    chip.setChecked(true);
+                    break;
+                }
+            }
+        }
+    }
+
     public void setMuteChecked(boolean isMute) {
         mMuteSwitch.setChecked(isMute);
+    }
+
+    public void setHideProgressChecked(boolean isHide) {
+        mHideProgressSwitch.setChecked(isHide);
+    }
+
+    public void setAutoRotateChecked(boolean isAutoRotate) {
+        mAutoRotateSwitch.setChecked(isAutoRotate);
     }
 
     public void setTimingText(String text) {

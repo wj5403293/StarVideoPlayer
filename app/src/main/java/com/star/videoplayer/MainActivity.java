@@ -5,30 +5,54 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-import com.star.play.StarStandardVideoController;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.star.play.StarVideoPlayer;
 import com.star.play.controller.StarEpisodeView;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import xyz.doikki.videoplayer.exo.ExoMediaPlayerFactory;
+import xyz.doikki.videoplayer.ijk.IjkPlayerFactory;
 
 public class MainActivity extends AppCompatActivity {
     private StarVideoPlayer videoView;
     private String URL="https://vv.jisuzyv.com/play/negox6je/index.m3u8";
-
+    private ArrayList<HashMap<String, Object>> episodeItems = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        videoView=findViewById(R.id.player);
-        videoView.setPlayerFactory(ExoMediaPlayerFactory.create());  //使用ijk内核
-        videoView.setUrl(URL); //设置视频地址
-        /* 初始化播放器 */
-        List<String> episodes = Arrays.asList("第1集", "第2集", "第3集", "第4集");
-        videoView.setEpisodes(episodes, 0);           // 设置集数数据
+        videoView = findViewById(R.id.player);
+
+        // 设置初始播放内核
+        videoView.setPlayerFactory(ExoMediaPlayerFactory.create());
+
+        // 设置视频地址
+        videoView.setUrl(URL);
+
+        // 设置剧集
+        for (int i = 0; i < 10; i++) {
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("name", "第" + i + "集");
+            episodeItems.add(map);
+        }
+        videoView.setEpisodeAdapter(new EpisodeAdapter(episodeItems));
+
+        // 设置标题
         videoView.addDefaultControlComponent("短剧", false);
+
+        // 监听内核切换
+        videoView.setOnPlayerKernelChangeListener((kernel, factory) -> {
+            videoView.release();  // 先释放
+            videoView.setPlayerFactory(factory);
+            videoView.setUrl(URL);
+            videoView.start();
+        });
+
         videoView.start(); //开始播放，不调用则不自动播放
         videoView.setOnUpSetClickListener(new StarVideoPlayer.OnUpSetClickListener() {
             @Override

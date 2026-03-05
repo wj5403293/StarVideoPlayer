@@ -89,6 +89,7 @@ public class StarStandardVideoController extends GestureVideoController implemen
         mSpeedTextView = findViewById(R.id.speed_text);
 
         mLockButton.setOnClickListener(this);
+        mLoadingIndicator.setVisibility(GONE);
     }
 
     /**
@@ -138,7 +139,9 @@ public class StarStandardVideoController extends GestureVideoController implemen
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.lock) {
-            mControlWrapper.toggleLockState();
+            if (mControlWrapper != null) {
+                mControlWrapper.toggleLockState();
+            }
         }
     }
 
@@ -245,11 +248,14 @@ public class StarStandardVideoController extends GestureVideoController implemen
                 }
                 break;
             case VideoView.STATE_PREPARING:
+                mLoadingIndicator.setVisibility(VISIBLE);
+                if (mControlWrapper != null && mControlWrapper.isFullScreen()) {
+                    show();
+                }
+                break;
             case VideoView.STATE_BUFFERING:
                 mLoadingIndicator.setVisibility(VISIBLE);
-                if (playState == VideoView.STATE_BUFFERING) {
-                    mIsBuffering = true;
-                }
+                mIsBuffering = true;
                 break;
             case VideoView.STATE_PLAYBACK_COMPLETED:
                 mLoadingIndicator.setVisibility(GONE);
