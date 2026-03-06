@@ -2,6 +2,7 @@ package com.star.play.controller;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,6 +36,7 @@ public class StarBottomView extends FrameLayout implements IControlComponent {
     private MaterialButton mSpeedView;
     private MaterialButton mSelectedWritingsView;
     private MaterialButton mFullscreenView;
+    private MaterialButton mFullscreenPortraitView;
     private Slider mSeekBar;
     private ProgressBar mBottomProgress;
     private View mPlayButtonsContainer;
@@ -43,11 +45,19 @@ public class StarBottomView extends FrameLayout implements IControlComponent {
     private boolean mIsShowBottomProgress = true;
     private boolean mIsFullScreen = false;
 
+    private int mSelectVisibility = View.VISIBLE;
+    private int mSpeedVisibility = View.VISIBLE;
+    private int mPreviousVisibility = View.GONE;
+    private int mNextVisibility = View.GONE;
+    private int mFullscreenVisibility = View.VISIBLE;
+    private int mFullscreenPortraitVisibility = View.GONE;
+
     private OnSelectClickListener mOnSelectClickListener;
     private OnSpeedClickListener mOnSpeedClickListener;
     private OnUpSetClickListener mOnUpSetClickListener;
     private OnDownSetClickListener mOnDownSetClickListener;
     private OnProgressListener mOnProgressListener;
+    private OnFullscreenPortraitClickListener mOnFullscreenPortraitClickListener;
 
     private View mCurrentLayout;
 
@@ -114,6 +124,7 @@ public class StarBottomView extends FrameLayout implements IControlComponent {
         mSpeedView = root.findViewById(R.id.speed);
         mSelectedWritingsView = root.findViewById(R.id.selected_writings);
         mFullscreenView = root.findViewById(R.id.fullscreen);
+        mFullscreenPortraitView = root.findViewById(R.id.fullscreen_portrait);
         mPlayButtonsContainer = root.findViewById(R.id.play_buttons_container);
 
         if (mSeekBar != null) {
@@ -126,6 +137,29 @@ public class StarBottomView extends FrameLayout implements IControlComponent {
 
         if (mControlWrapper != null) {
             updatePlayButtonIcon();
+        }
+
+        applyButtonVisibility();
+    }
+
+    private void applyButtonVisibility() {
+        if (mSelectedWritingsView != null) {
+            mSelectedWritingsView.setVisibility(mSelectVisibility);
+        }
+        if (mSpeedView != null) {
+            mSpeedView.setVisibility(mSpeedVisibility);
+        }
+        if (mSkipPreviousView != null) {
+            mSkipPreviousView.setVisibility(mPreviousVisibility);
+        }
+        if (mSkipNextView != null) {
+            mSkipNextView.setVisibility(mNextVisibility);
+        }
+        if (mFullscreenView != null) {
+            mFullscreenView.setVisibility(mFullscreenVisibility);
+        }
+        if (mFullscreenPortraitView != null) {
+            mFullscreenPortraitView.setVisibility(mFullscreenPortraitVisibility);
         }
     }
 
@@ -172,6 +206,15 @@ public class StarBottomView extends FrameLayout implements IControlComponent {
         if (mFullscreenView != null) {
             mFullscreenView.setOnClickListener(v -> toggleFullScreen());
         }
+
+        if (mFullscreenPortraitView != null) {
+            mFullscreenPortraitView.setOnClickListener(v -> {
+                togglePortraitFullScreen();
+                if (mOnFullscreenPortraitClickListener != null) {
+                    mOnFullscreenPortraitClickListener.onClick(v);
+                }
+            });
+        }
     }
 
     private void setupSeekBarListener() {
@@ -215,6 +258,15 @@ public class StarBottomView extends FrameLayout implements IControlComponent {
         mControlWrapper.toggleFullScreen(activity);
     }
 
+    private void togglePortraitFullScreen() {
+        if (mControlWrapper == null) return;
+        Activity activity = PlayerUtils.scanForActivity(getContext());
+        if (activity != null) {
+            activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
+        mControlWrapper.startFullScreen();
+    }
+
     public interface OnSelectClickListener {
         void onClick(View view);
     }
@@ -233,6 +285,10 @@ public class StarBottomView extends FrameLayout implements IControlComponent {
 
     public interface OnProgressListener {
         void onProgress();
+    }
+
+    public interface OnFullscreenPortraitClickListener {
+        void onClick(View view);
     }
 
     public void setOnSelectClickListener(OnSelectClickListener listener) {
@@ -255,6 +311,10 @@ public class StarBottomView extends FrameLayout implements IControlComponent {
         mOnProgressListener = listener;
     }
 
+    public void setOnFullscreenPortraitClickListener(OnFullscreenPortraitClickListener listener) {
+        mOnFullscreenPortraitClickListener = listener;
+    }
+
     public void showBottomProgress(boolean isShow) {
         mIsShowBottomProgress = isShow;
         if (!isShow && mBottomProgress != null) {
@@ -264,6 +324,69 @@ public class StarBottomView extends FrameLayout implements IControlComponent {
 
     public void setShowBottomProgress(boolean isShow) {
         showBottomProgress(isShow);
+    }
+
+    public void setBottomButtonsVisibility(int selectVisibility, int speedVisibility, 
+                                           int previousVisibility, int nextVisibility) {
+        mSelectVisibility = selectVisibility;
+        mSpeedVisibility = speedVisibility;
+        mPreviousVisibility = previousVisibility;
+        mNextVisibility = nextVisibility;
+        applyButtonVisibility();
+    }
+
+    public void setBottomButtonsVisibility(int selectVisibility, int speedVisibility, 
+                                           int previousVisibility, int nextVisibility,
+                                           int fullscreenVisibility, int fullscreenPortraitVisibility) {
+        mSelectVisibility = selectVisibility;
+        mSpeedVisibility = speedVisibility;
+        mPreviousVisibility = previousVisibility;
+        mNextVisibility = nextVisibility;
+        mFullscreenVisibility = fullscreenVisibility;
+        mFullscreenPortraitVisibility = fullscreenPortraitVisibility;
+        applyButtonVisibility();
+    }
+
+    public void setSelectButtonVisibility(int visibility) {
+        mSelectVisibility = visibility;
+        if (mSelectedWritingsView != null) {
+            mSelectedWritingsView.setVisibility(visibility);
+        }
+    }
+
+    public void setSpeedButtonVisibility(int visibility) {
+        mSpeedVisibility = visibility;
+        if (mSpeedView != null) {
+            mSpeedView.setVisibility(visibility);
+        }
+    }
+
+    public void setPreviousButtonVisibility(int visibility) {
+        mPreviousVisibility = visibility;
+        if (mSkipPreviousView != null) {
+            mSkipPreviousView.setVisibility(visibility);
+        }
+    }
+
+    public void setNextButtonVisibility(int visibility) {
+        mNextVisibility = visibility;
+        if (mSkipNextView != null) {
+            mSkipNextView.setVisibility(visibility);
+        }
+    }
+
+    public void setFullscreenButtonVisibility(int visibility) {
+        mFullscreenVisibility = visibility;
+        if (mFullscreenView != null) {
+            mFullscreenView.setVisibility(visibility);
+        }
+    }
+
+    public void setFullscreenPortraitButtonVisibility(int visibility) {
+        mFullscreenPortraitVisibility = visibility;
+        if (mFullscreenPortraitView != null) {
+            mFullscreenPortraitView.setVisibility(visibility);
+        }
     }
 
     @Override

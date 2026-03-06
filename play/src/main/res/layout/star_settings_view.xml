@@ -15,487 +15,496 @@
         android:layout_width="320dp"
         android:layout_height="match_parent"
         android:layout_gravity="end"
-        android:background="?attr/colorOnBackground"
         android:orientation="vertical"
         android:elevation="12dp">
-
-        <!-- 顶部标题栏 -->
+        <com.google.android.material.card.MaterialCardView
+        style="@style/Widget.Material3.CardView.Elevated"
+        android:id="@+id/one_cardview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardElevation="0dp">
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="52dp"
-            android:gravity="center_vertical"
-            android:paddingStart="16dp"
-            android:paddingEnd="8dp">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="播放设置"
-                android:textColor="#FFFFFF"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:letterSpacing="0.05" />
-
-            <com.google.android.material.button.MaterialButton
-                style="?attr/materialIconButtonStyle"
-                android:id="@+id/btn_close"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:icon="@drawable/close"
-                app:iconTint="#FFFFFF"
-                app:rippleColor="#33FFFFFF" />
-        </LinearLayout>
-
-        <androidx.core.widget.NestedScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <!-- 顶部标题栏 -->
             <LinearLayout
-                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="52dp"
+                android:gravity="center_vertical"
+                android:paddingStart="16dp"
+                android:paddingEnd="8dp">
 
-                <!-- 画面比例 -->
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="画面比例"
-                    android:textColor="#ffffff"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    android:letterSpacing="0.05"
-                    android:layout_margin="16dp"/>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <com.google.android.material.chip.ChipGroup
-                        android:id="@+id/chipGroup"
-                        android:clipToPadding="false"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:clipChildren="false"
-                        android:paddingStart="16dp"
-                        android:paddingEnd="16dp"
-                        app:selectionRequired="true"
-                        app:singleSelection="true"
-                        app:chipSpacingHorizontal="6dp"
-                        app:chipSpacingVertical="6dp">
-
-                        <com.google.android.material.chip.Chip
-                            style="@style/Widget.Material3.Chip.Filter"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                            android:textColor="?attr/colorOnBackground"
-                            android:textSize="12sp"
-                            app:chipIconEnabled="false"
-                            app:chipIconSize="12dp"
-                            app:chipMinHeight="32dp"
-                            app:chipStrokeWidth="0dp"
-                            app:ensureMinTouchTargetSize="false"
-                            app:textEndPadding="6dp"
-                            app:textStartPadding="6dp"
-                            app:chipCornerRadius="16dp"
-                            android:text="16 : 9"/>
-                        <com.google.android.material.chip.Chip
-                            style="@style/Widget.Material3.Chip.Filter"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                            android:textColor="?attr/colorOnBackground"
-                            android:textSize="12sp"
-                            app:chipIconEnabled="false"
-                            app:chipIconSize="12dp"
-                            app:chipMinHeight="32dp"
-                            app:chipStrokeWidth="0dp"
-                            app:ensureMinTouchTargetSize="false"
-                            app:textEndPadding="6dp"
-                            app:textStartPadding="6dp"
-                            app:chipCornerRadius="16dp"
-                            android:text="4 : 3"/>
-                        <com.google.android.material.chip.Chip
-                            style="@style/Widget.Material3.Chip.Filter"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                            android:textColor="?attr/colorOnBackground"
-                            android:textSize="12sp"
-                            app:chipIconEnabled="false"
-                            app:chipIconSize="12dp"
-                            app:chipMinHeight="32dp"
-                            app:chipStrokeWidth="0dp"
-                            app:ensureMinTouchTargetSize="false"
-                            app:textEndPadding="6dp"
-                            app:textStartPadding="6dp"
-                            app:chipCornerRadius="16dp"
-                            android:checked="true"
-                            android:text="默 认"/>
-                        <com.google.android.material.chip.Chip
-                            style="@style/Widget.Material3.Chip.Filter"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                            android:textColor="?attr/colorOnBackground"
-                            android:textSize="12sp"
-                            app:chipIconEnabled="false"
-                            app:chipIconSize="12dp"
-                            app:chipMinHeight="32dp"
-                            app:chipStrokeWidth="0dp"
-                            app:ensureMinTouchTargetSize="false"
-                            app:textEndPadding="6dp"
-                            app:textStartPadding="6dp"
-                            app:chipCornerRadius="16dp"
-                            android:text="填 充"/>
-                        <com.google.android.material.chip.Chip
-                            style="@style/Widget.Material3.Chip.Filter"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                            android:textColor="?attr/colorOnBackground"
-                            android:textSize="12sp"
-                            app:chipIconEnabled="false"
-                            app:chipIconSize="12dp"
-                            app:chipMinHeight="32dp"
-                            app:chipStrokeWidth="0dp"
-                            app:ensureMinTouchTargetSize="false"
-                            app:textEndPadding="6dp"
-                            app:textStartPadding="6dp"
-                            app:chipCornerRadius="16dp"
-                            android:text="缩 放"/>
-                        <com.google.android.material.chip.Chip
-                            style="@style/Widget.Material3.Chip.Filter"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                            android:textColor="?attr/colorOnBackground"
-                            android:textSize="12sp"
-                            app:chipIconEnabled="false"
-                            app:chipIconSize="12dp"
-                            app:chipMinHeight="32dp"
-                            app:chipStrokeWidth="0dp"
-                            app:ensureMinTouchTargetSize="false"
-                            app:textEndPadding="6dp"
-                            app:textStartPadding="6dp"
-                            app:chipCornerRadius="16dp"
-                            android:text="裁 剪"/>
-
-                    </com.google.android.material.chip.ChipGroup>
-                </LinearLayout>
-
-                <!-- 播放内核 -->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="播放内核"
-                    android:textColor="#ffffff"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    android:letterSpacing="0.05"
-                    android:layout_margin="16dp"/>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <com.google.android.material.chip.ChipGroup
-                        android:id="@+id/chipGroupPlayer"
-                        android:clipToPadding="false"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:clipChildren="false"
-                        android:paddingStart="16dp"
-                        android:paddingEnd="16dp"
-                        app:selectionRequired="true"
-                        app:singleSelection="true"
-                        app:chipSpacingHorizontal="6dp"
-                        app:chipSpacingVertical="6dp">
-
-                        <com.google.android.material.chip.Chip
-                            style="@style/Widget.Material3.Chip.Filter"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                            android:textColor="?attr/colorOnBackground"
-                            android:textSize="12sp"
-                            app:chipIconEnabled="false"
-                            app:chipIconSize="12dp"
-                            app:chipMinHeight="32dp"
-                            app:chipStrokeWidth="0dp"
-                            app:ensureMinTouchTargetSize="false"
-                            app:textEndPadding="6dp"
-                            app:textStartPadding="6dp"
-                            app:chipCornerRadius="16dp"
-                            android:checked="true"
-                            android:text="ExoPlayer"/>
-                        <com.google.android.material.chip.Chip
-                            style="@style/Widget.Material3.Chip.Filter"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                            android:textColor="?attr/colorOnBackground"
-                            android:textSize="12sp"
-                            app:chipIconEnabled="false"
-                            app:chipIconSize="12dp"
-                            app:chipMinHeight="32dp"
-                            app:chipStrokeWidth="0dp"
-                            app:ensureMinTouchTargetSize="false"
-                            app:textEndPadding="6dp"
-                            app:textStartPadding="6dp"
-                            app:chipCornerRadius="16dp"
-                            android:text="IJKPlayer"/>
-
-                    </com.google.android.material.chip.ChipGroup>
-                </LinearLayout>
-
-                <!-- 静音 -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="静音"
-                        android:layout_centerInParent="true"
-                        android:layout_alignParentStart="true"
-                        android:textColor="#ffffff"
-                        android:textSize="14sp"
-                        android:textStyle="bold"
-                        android:letterSpacing="0.05" />
-                    <com.google.android.material.materialswitch.MaterialSwitch
-                        android:id="@+id/switch_mute"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:textSize="15dp" />
-                </LinearLayout>
-
-                <!-- 隐藏底部进度条 -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="隐藏进度条"
-                        android:layout_centerInParent="true"
-                        android:layout_alignParentStart="true"
-                        android:textColor="#ffffff"
-                        android:textSize="14sp"
-                        android:textStyle="bold"
-                        android:letterSpacing="0.05" />
-                    <com.google.android.material.materialswitch.MaterialSwitch
-                        android:id="@+id/switch_hide_progress"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:textSize="15dp" />
-                </LinearLayout>
-
-                <!-- 自适应屏幕方向 -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="自动旋转"
-                        android:layout_centerInParent="true"
-                        android:layout_alignParentStart="true"
-                        android:textColor="#ffffff"
-                        android:textSize="14sp"
-                        android:textStyle="bold"
-                        android:letterSpacing="0.05" />
-                    <com.google.android.material.materialswitch.MaterialSwitch
-                        android:id="@+id/switch_auto_rotate"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:textSize="15dp" />
-                </LinearLayout>
-
-                <!-- 定时关闭 -->
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="0dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="16dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="定时关闭"
-                        android:layout_alignParentStart="true"
-                        android:layout_centerInParent="true"
-                        android:textColor="#ffffff"
-                        android:textSize="14sp"
-                        android:textStyle="bold"
-                        android:letterSpacing="0.05" />
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btn_timing"
-                        style="?attr/borderlessButtonStyle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="不启用"
-                        android:textSize="13sp"
-                        android:layout_centerInParent="true"
-                        android:layout_alignParentEnd="true"/>
-                </RelativeLayout>
-
-                <!-- 长按倍速 -->
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="0dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="8dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="长按倍速"
-                        android:layout_alignParentStart="true"
-                        android:layout_centerInParent="true"
-                        android:textColor="#ffffff"
-                        android:textSize="14sp"
-                        android:textStyle="bold"
-                        android:letterSpacing="0.05" />
-
-                    <TextView
-                        android:id="@+id/tv_long_press_speed"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="3.0X"
-                        android:textColor="#ffffff"
-                        android:textSize="13sp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerInParent="true" />
-                </RelativeLayout>
-
-                <com.google.android.material.slider.Slider
-                    android:id="@+id/slider_long_press_speed"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    app:thumbStrokeWidth="0dp"
-                    app:thumbHeight="12dp"
-                    app:trackHeight="8dp"
-                    app:thumbStrokeColor="@null"
-                    app:thumbColor="?attr/colorPrimary"
-                    app:trackColorActive="?attr/colorPrimary"
-                    android:stepSize="1"
-                    app:thumbRadius="10dp" />
+                    android:text="播放设置"
+                    android:textColor="?attr/colorOnBackground"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.05" />
 
-                <!-- 跳过片头 -->
-                <RelativeLayout
-                    android:layout_width="match_parent"
+                <com.google.android.material.button.MaterialButton
+                    style="?attr/materialIconButtonStyle"
+                    android:id="@+id/btn_close"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="0dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="8dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="跳过片头"
-                        android:layout_alignParentStart="true"
-                        android:layout_centerInParent="true"
-                        android:textColor="#ffffff"
-                        android:textSize="14sp"
-                        android:textStyle="bold"
-                        android:letterSpacing="0.05" />
-
-                    <TextView
-                        android:id="@+id/tv_skip_start"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="00:00"
-                        android:textColor="#ffffff"
-                        android:textSize="13sp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerInParent="true" />
-                </RelativeLayout>
-
-                <com.google.android.material.slider.Slider
-                    android:id="@+id/slider_skip_start"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="0dp"
-                    android:layout_marginBottom="16dp"
-                    android:stepSize="1"
-                    app:thumbStrokeWidth="0dp"
-                    app:thumbHeight="12dp"
-                    app:trackHeight="8dp"
-                    app:thumbStrokeColor="@android:color/transparent"
-                    app:thumbColor="?attr/colorPrimary"
-                    app:trackColorActive="?attr/colorPrimary"
-                    app:thumbRadius="10dp" />
-
-                <!-- 跳过片尾 -->
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="0dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="8dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="跳过片尾"
-                        android:layout_alignParentStart="true"
-                        android:layout_centerInParent="true"
-                        android:textColor="#ffffff"
-                        android:textSize="14sp"
-                        android:textStyle="bold"
-                        android:letterSpacing="0.05" />
-
-                    <TextView
-                        android:id="@+id/tv_skip_end"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="00:00"
-                        android:textColor="#ffffff"
-                        android:textSize="13sp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerInParent="true" />
-                </RelativeLayout>
-
-                <com.google.android.material.slider.Slider
-                    android:id="@+id/slider_skip_end"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="0dp"
-                    android:layout_marginBottom="16dp"
-                    android:stepSize="1"
-                    app:thumbStrokeWidth="0dp"
-                    app:thumbHeight="12dp"
-                    app:trackHeight="8dp"
-                    app:thumbStrokeColor="@android:color/transparent"
-                    app:thumbColor="?attr/colorPrimary"
-                    app:trackColorActive="?attr/colorPrimary"
-                    app:thumbRadius="10dp" />
+                    app:icon="@drawable/close"
+                    app:iconTint="?attr/colorOnBackground"
+                    app:rippleColor="#33000000" />
             </LinearLayout>
-        </androidx.core.widget.NestedScrollView>
 
+            <androidx.core.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <!-- 画面比例 -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="画面比例"
+                        android:textColor="?attr/colorOnBackground"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:letterSpacing="0.05"
+                        android:layout_margin="16dp"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <com.google.android.material.chip.ChipGroup
+                            android:id="@+id/chipGroup"
+                            android:clipToPadding="false"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:clipChildren="false"
+                            android:paddingStart="16dp"
+                            android:paddingEnd="16dp"
+                            app:selectionRequired="true"
+                            app:singleSelection="true"
+                            app:chipSpacingHorizontal="6dp"
+                            app:chipSpacingVertical="6dp">
+
+                            <com.google.android.material.chip.Chip
+                                style="@style/Widget.Material3.Chip.Filter"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                                android:textColor="?attr/colorOnBackground"
+                                android:textSize="12sp"
+                                app:chipIconEnabled="false"
+                                app:chipIconSize="12dp"
+                                app:chipMinHeight="32dp"
+                                app:chipStrokeWidth="0dp"
+                                app:ensureMinTouchTargetSize="false"
+                                app:textEndPadding="6dp"
+                                app:textStartPadding="6dp"
+                                app:chipCornerRadius="16dp"
+                                android:text="16 : 9"/>
+                            <com.google.android.material.chip.Chip
+                                style="@style/Widget.Material3.Chip.Filter"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                                android:textColor="?attr/colorOnBackground"
+                                android:textSize="12sp"
+                                app:chipIconEnabled="false"
+                                app:chipIconSize="12dp"
+                                app:chipMinHeight="32dp"
+                                app:chipStrokeWidth="0dp"
+                                app:ensureMinTouchTargetSize="false"
+                                app:textEndPadding="6dp"
+                                app:textStartPadding="6dp"
+                                app:chipCornerRadius="16dp"
+                                android:text="4 : 3"/>
+                            <com.google.android.material.chip.Chip
+                                style="@style/Widget.Material3.Chip.Filter"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                                android:textColor="?attr/colorOnBackground"
+                                android:textSize="12sp"
+                                app:chipIconEnabled="false"
+                                app:chipIconSize="12dp"
+                                app:chipMinHeight="32dp"
+                                app:chipStrokeWidth="0dp"
+                                app:ensureMinTouchTargetSize="false"
+                                app:textEndPadding="6dp"
+                                app:textStartPadding="6dp"
+                                app:chipCornerRadius="16dp"
+                                android:checked="true"
+                                android:text="默 认"/>
+                            <com.google.android.material.chip.Chip
+                                style="@style/Widget.Material3.Chip.Filter"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                                android:textColor="?attr/colorOnBackground"
+                                android:textSize="12sp"
+                                app:chipIconEnabled="false"
+                                app:chipIconSize="12dp"
+                                app:chipMinHeight="32dp"
+                                app:chipStrokeWidth="0dp"
+                                app:ensureMinTouchTargetSize="false"
+                                app:textEndPadding="6dp"
+                                app:textStartPadding="6dp"
+                                app:chipCornerRadius="16dp"
+                                android:text="填 充"/>
+                            <com.google.android.material.chip.Chip
+                                style="@style/Widget.Material3.Chip.Filter"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                                android:textColor="?attr/colorOnBackground"
+                                android:textSize="12sp"
+                                app:chipIconEnabled="false"
+                                app:chipIconSize="12dp"
+                                app:chipMinHeight="32dp"
+                                app:chipStrokeWidth="0dp"
+                                app:ensureMinTouchTargetSize="false"
+                                app:textEndPadding="6dp"
+                                app:textStartPadding="6dp"
+                                app:chipCornerRadius="16dp"
+                                android:text="缩 放"/>
+                            <com.google.android.material.chip.Chip
+                                style="@style/Widget.Material3.Chip.Filter"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                                android:textColor="?attr/colorOnBackground"
+                                android:textSize="12sp"
+                                app:chipIconEnabled="false"
+                                app:chipIconSize="12dp"
+                                app:chipMinHeight="32dp"
+                                app:chipStrokeWidth="0dp"
+                                app:ensureMinTouchTargetSize="false"
+                                app:textEndPadding="6dp"
+                                app:textStartPadding="6dp"
+                                app:chipCornerRadius="16dp"
+                                android:text="裁 剪"/>
+
+                        </com.google.android.material.chip.ChipGroup>
+                    </LinearLayout>
+
+                    <!-- 播放内核 -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="播放内核"
+                        android:textColor="?attr/colorOnBackground"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:letterSpacing="0.05"
+                        android:layout_margin="16dp"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <com.google.android.material.chip.ChipGroup
+                            android:id="@+id/chipGroupPlayer"
+                            android:clipToPadding="false"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:clipChildren="false"
+                            android:paddingStart="16dp"
+                            android:paddingEnd="16dp"
+                            app:selectionRequired="true"
+                            app:singleSelection="true"
+                            app:chipSpacingHorizontal="6dp"
+                            app:chipSpacingVertical="6dp">
+
+                            <com.google.android.material.chip.Chip
+                                style="@style/Widget.Material3.Chip.Filter"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                                android:textColor="?attr/colorOnBackground"
+                                android:textSize="12sp"
+                                app:chipIconEnabled="false"
+                                app:chipIconSize="12dp"
+                                app:chipMinHeight="32dp"
+                                app:chipStrokeWidth="0dp"
+                                app:ensureMinTouchTargetSize="false"
+                                app:textEndPadding="6dp"
+                                app:textStartPadding="6dp"
+                                app:chipCornerRadius="16dp"
+                                android:checked="true"
+                                android:text="ExoPlayer"/>
+                            <com.google.android.material.chip.Chip
+                                style="@style/Widget.Material3.Chip.Filter"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                                android:textColor="?attr/colorOnBackground"
+                                android:textSize="12sp"
+                                app:chipIconEnabled="false"
+                                app:chipIconSize="12dp"
+                                app:chipMinHeight="32dp"
+                                app:chipStrokeWidth="0dp"
+                                app:ensureMinTouchTargetSize="false"
+                                app:textEndPadding="6dp"
+                                app:textStartPadding="6dp"
+                                app:chipCornerRadius="16dp"
+                                android:text="IJKPlayer"/>
+
+                        </com.google.android.material.chip.ChipGroup>
+                    </LinearLayout>
+
+                    <!-- 静音 -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="静音"
+                            android:layout_centerInParent="true"
+                            android:layout_alignParentStart="true"
+                            android:textColor="?attr/colorOnBackground"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:letterSpacing="0.05" />
+                        <com.google.android.material.materialswitch.MaterialSwitch
+                            android:id="@+id/switch_mute"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:textSize="15dp" />
+                    </LinearLayout>
+
+                    <!-- 隐藏底部进度条 -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="隐藏进度条"
+                            android:layout_centerInParent="true"
+                            android:layout_alignParentStart="true"
+                            android:textColor="?attr/colorOnBackground"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:letterSpacing="0.05" />
+                        <com.google.android.material.materialswitch.MaterialSwitch
+                            android:id="@+id/switch_hide_progress"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:textSize="15dp" />
+                    </LinearLayout>
+
+                    <!-- 自适应屏幕方向 -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="自动旋转"
+                            android:layout_centerInParent="true"
+                            android:layout_alignParentStart="true"
+                            android:textColor="?attr/colorOnBackground"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:letterSpacing="0.05" />
+                        <com.google.android.material.materialswitch.MaterialSwitch
+                            android:id="@+id/switch_auto_rotate"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:textSize="15dp" />
+                    </LinearLayout>
+
+                    <!-- 定时关闭 -->
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="0dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="定时关闭"
+                            android:layout_alignParentStart="true"
+                            android:layout_centerInParent="true"
+                            android:textColor="?attr/colorOnBackground"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:letterSpacing="0.05" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btn_timing"
+                            style="?attr/borderlessButtonStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="不启用"
+                            android:textSize="13sp"
+                            android:layout_centerInParent="true"
+                            android:layout_alignParentEnd="true"/>
+                    </RelativeLayout>
+
+                    <!-- 长按倍速 -->
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="0dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="8dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="长按倍速"
+                            android:layout_alignParentStart="true"
+                            android:layout_centerInParent="true"
+                            android:textColor="?attr/colorOnBackground"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:letterSpacing="0.05" />
+
+                        <TextView
+                            android:id="@+id/tv_long_press_speed"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="3.0X"
+                            android:textColor="?attr/colorOnBackground"
+                            android:textSize="13sp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerInParent="true" />
+                    </RelativeLayout>
+
+                    <com.google.android.material.slider.Slider
+                        android:id="@+id/slider_long_press_speed"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        app:thumbStrokeWidth="0dp"
+                        app:thumbHeight="12dp"
+                        app:trackHeight="8dp"
+                        app:thumbStrokeColor="@null"
+                        app:thumbColor="?attr/colorPrimary"
+                        app:trackColorActive="?attr/colorPrimary"
+                        android:stepSize="1"
+                        app:thumbRadius="10dp" />
+
+                    <!-- 跳过片头 -->
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="0dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="8dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="跳过片头"
+                            android:layout_alignParentStart="true"
+                            android:layout_centerInParent="true"
+                            android:textColor="?attr/colorOnBackground"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:letterSpacing="0.05" />
+
+                        <TextView
+                            android:id="@+id/tv_skip_start"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="00:00"
+                            android:textColor="?attr/colorOnBackground"
+                            android:textSize="13sp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerInParent="true" />
+                    </RelativeLayout>
+
+                    <com.google.android.material.slider.Slider
+                        android:id="@+id/slider_skip_start"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="0dp"
+                        android:layout_marginBottom="16dp"
+                        android:stepSize="1"
+                        app:thumbStrokeWidth="0dp"
+                        app:thumbHeight="12dp"
+                        app:trackHeight="8dp"
+                        app:thumbStrokeColor="@android:color/transparent"
+                        app:thumbColor="?attr/colorPrimary"
+                        app:trackColorActive="?attr/colorPrimary"
+                        app:thumbRadius="10dp" />
+
+                    <!-- 跳过片尾 -->
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="0dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="8dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="跳过片尾"
+                            android:layout_alignParentStart="true"
+                            android:layout_centerInParent="true"
+                            android:textColor="?attr/colorOnBackground"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:letterSpacing="0.05" />
+
+                        <TextView
+                            android:id="@+id/tv_skip_end"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="00:00"
+                            android:textColor="?attr/colorOnBackground"
+                            android:textSize="13sp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerInParent="true" />
+                    </RelativeLayout>
+
+                    <com.google.android.material.slider.Slider
+                        android:id="@+id/slider_skip_end"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="0dp"
+                        android:layout_marginBottom="16dp"
+                        android:stepSize="1"
+                        app:thumbStrokeWidth="0dp"
+                        app:thumbHeight="12dp"
+                        app:trackHeight="8dp"
+                        app:thumbStrokeColor="@android:color/transparent"
+                        app:thumbColor="?attr/colorPrimary"
+                        app:trackColorActive="?attr/colorPrimary"
+                        app:thumbRadius="10dp" />
+                </LinearLayout>
+            </androidx.core.widget.NestedScrollView>
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
     </LinearLayout>
 
 </merge>

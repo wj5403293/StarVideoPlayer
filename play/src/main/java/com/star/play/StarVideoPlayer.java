@@ -601,6 +601,74 @@ public class StarVideoPlayer extends VideoView {
         return mPrefs.getBoolean(KEY_AUTO_NEXT, true);
     }
 
+    public void setVisibilityBottom(int selectVisibility, int speedVisibility, 
+                                    int previousVisibility, int nextVisibility) {
+        mBottomView.setBottomButtonsVisibility(selectVisibility, speedVisibility, 
+                                               previousVisibility, nextVisibility);
+    }
+
+    public void setVisibilityBottom(int selectVisibility, int speedVisibility, 
+                                    int previousVisibility, int nextVisibility,
+                                    int fullscreenVisibility, int fullscreenPortraitVisibility) {
+        mBottomView.setBottomButtonsVisibility(selectVisibility, speedVisibility, 
+                                               previousVisibility, nextVisibility,
+                                               fullscreenVisibility, fullscreenPortraitVisibility);
+    }
+
+    public void setSelectButtonVisibility(int visibility) {
+        mBottomView.setSelectButtonVisibility(visibility);
+    }
+
+    public void setSpeedButtonVisibility(int visibility) {
+        mBottomView.setSpeedButtonVisibility(visibility);
+    }
+
+    public void setPreviousButtonVisibility(int visibility) {
+        mBottomView.setPreviousButtonVisibility(visibility);
+    }
+
+    public void setNextButtonVisibility(int visibility) {
+        mBottomView.setNextButtonVisibility(visibility);
+    }
+
+    public void setFullscreenButtonVisibility(int visibility) {
+        mBottomView.setFullscreenButtonVisibility(visibility);
+    }
+
+    public void setFullscreenPortraitButtonVisibility(int visibility) {
+        mBottomView.setFullscreenPortraitButtonVisibility(visibility);
+    }
+
+    public void setOnFullscreenPortraitClickListener(StarBottomView.OnFullscreenPortraitClickListener listener) {
+        mBottomView.setOnFullscreenPortraitClickListener(listener);
+    }
+
+    public void setTitleButtonsVisibility(int backVisibility, int pipVisibility, 
+                                          int screenVisibility, int settingsVisibility) {
+        mTitleView.setTitleButtonsVisibility(backVisibility, pipVisibility, 
+                                             screenVisibility, settingsVisibility);
+    }
+
+    public void setBackButtonVisibility(int visibility) {
+        mTitleView.setBackButtonVisibility(visibility);
+    }
+
+    public void setPipButtonVisibility(int visibility) {
+        mTitleView.setPipButtonVisibility(visibility);
+    }
+
+    public void setScreenButtonVisibility(int visibility) {
+        mTitleView.setScreenButtonVisibility(visibility);
+    }
+
+    public void setSettingsButtonVisibility(int visibility) {
+        mTitleView.setSettingsButtonVisibility(visibility);
+    }
+
+    public void setSysTimeVisibility(int visibility) {
+        mTitleView.setSysTimeVisibility(visibility);
+    }
+
     public int getCurrentEpisodeIndex() {
         return mCurrentEpisodeIndex;
     }

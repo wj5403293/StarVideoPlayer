@@ -135,6 +135,52 @@ public class StarTitleView extends FrameLayout implements IControlComponent {
         }
     }
 
+    public void setTitleButtonsVisibility(int backVisibility, int pipVisibility, 
+                                          int screenVisibility, int settingsVisibility) {
+        if (mBackView != null) {
+            mBackView.setVisibility(backVisibility);
+        }
+        if (mPipView != null) {
+            mPipView.setVisibility(pipVisibility);
+        }
+        if (mScreenView != null) {
+            mScreenView.setVisibility(screenVisibility);
+        }
+        if (mSettingsView != null) {
+            mSettingsView.setVisibility(settingsVisibility);
+        }
+    }
+
+    public void setBackButtonVisibility(int visibility) {
+        if (mBackView != null) {
+            mBackView.setVisibility(visibility);
+        }
+    }
+
+    public void setPipButtonVisibility(int visibility) {
+        if (mPipView != null) {
+            mPipView.setVisibility(visibility);
+        }
+    }
+
+    public void setScreenButtonVisibility(int visibility) {
+        if (mScreenView != null) {
+            mScreenView.setVisibility(visibility);
+        }
+    }
+
+    public void setSettingsButtonVisibility(int visibility) {
+        if (mSettingsView != null) {
+            mSettingsView.setVisibility(visibility);
+        }
+    }
+
+    public void setSysTimeVisibility(int visibility) {
+        if (mSysTimeView != null) {
+            mSysTimeView.setVisibility(visibility);
+        }
+    }
+
     @Override
     public void attach(@NonNull ControlWrapper controlWrapper) {
         mControlWrapper = controlWrapper;

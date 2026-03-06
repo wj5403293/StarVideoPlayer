@@ -19,6 +19,8 @@
 - **锁屏功能** - 全屏模式下可锁定控制栏
 - **隐藏进度条** - 可选择隐藏底部进度条
 - **自动旋转** - 支持根据设备方向自动切换横竖屏
+- **竖屏全屏** - 支持竖屏全屏模式，适合短剧场景
+- **按钮可见性控制** - 可控制底部和顶部各按钮的显示/隐藏
 
 ## 引入方式
 
@@ -213,6 +215,45 @@ videoView.setOnPlayerKernelChangeListener(kernel -> {
     videoView.setUrl(currentUrl);
     videoView.start();
 });
+
+// 显示竖屏全屏按钮
+videoView.setFullscreenPortraitButtonVisibility(View.VISIBLE);
+
+// 设置竖屏全屏点击监听（可选，默认已有竖屏全屏功能）
+videoView.setOnFullscreenPortraitClickListener(view -> {
+    // 额外操作，如记录日志等
+});
+```
+
+### 6. 按钮可见性控制
+
+```java
+// 隐藏底部按钮（4个参数：选集、倍速、上一集、下一集）
+videoView.setVisibilityBottom(View.GONE, View.GONE, View.GONE, View.GONE);
+
+// 隐藏底部按钮（6个参数：选集、倍速、上一集、下一集、全屏、竖屏全屏）
+videoView.setVisibilityBottom(
+    View.GONE, View.GONE, View.GONE, View.GONE,  // 选集、倍速、上一集、下一集
+    View.GONE, View.VISIBLE                       // 全屏、竖屏全屏
+);
+
+// 单独控制底部按钮
+videoView.setSelectButtonVisibility(View.GONE);      // 选集按钮
+videoView.setSpeedButtonVisibility(View.GONE);       // 倍速按钮
+videoView.setPreviousButtonVisibility(View.GONE);    // 上一集按钮
+videoView.setNextButtonVisibility(View.GONE);        // 下一集按钮
+videoView.setFullscreenButtonVisibility(View.GONE);  // 全屏按钮
+videoView.setFullscreenPortraitButtonVisibility(View.VISIBLE);  // 竖屏全屏按钮
+
+// 隐藏顶部按钮（返回、小窗、投屏、设置）
+videoView.setTitleButtonsVisibility(View.GONE, View.GONE, View.GONE, View.GONE);
+
+// 单独控制顶部按钮
+videoView.setBackButtonVisibility(View.GONE);      // 返回按钮
+videoView.setPipButtonVisibility(View.GONE);       // 小窗按钮
+videoView.setScreenButtonVisibility(View.GONE);    // 投屏按钮
+videoView.setSettingsButtonVisibility(View.GONE);  // 设置按钮
+videoView.setSysTimeVisibility(View.GONE);         // 系统时间
 ```
 
 ## API 说明
@@ -238,6 +279,20 @@ videoView.setOnPlayerKernelChangeListener(kernel -> {
 | `setAutoRotate(boolean autoRotate)` | 设置是否开启自动旋转 |
 | `setPlayerKernel(String kernel)` | 设置播放内核（"ExoPlayer" 或 "IJKPlayer"） |
 | `getPlayerKernel()` | 获取当前播放内核 |
+| `setVisibilityBottom(select, speed, previous, next)` | 设置底部按钮可见性（4参数） |
+| `setVisibilityBottom(select, speed, previous, next, fullscreen, fullscreenPortrait)` | 设置底部按钮可见性（6参数） |
+| `setSelectButtonVisibility(visibility)` | 设置选集按钮可见性 |
+| `setSpeedButtonVisibility(visibility)` | 设置倍速按钮可见性 |
+| `setPreviousButtonVisibility(visibility)` | 设置上一集按钮可见性 |
+| `setNextButtonVisibility(visibility)` | 设置下一集按钮可见性 |
+| `setFullscreenButtonVisibility(visibility)` | 设置全屏按钮可见性 |
+| `setFullscreenPortraitButtonVisibility(visibility)` | 设置竖屏全屏按钮可见性 |
+| `setTitleButtonsVisibility(back, pip, screen, settings)` | 设置顶部按钮可见性 |
+| `setBackButtonVisibility(visibility)` | 设置返回按钮可见性 |
+| `setPipButtonVisibility(visibility)` | 设置小窗按钮可见性 |
+| `setScreenButtonVisibility(visibility)` | 设置投屏按钮可见性 |
+| `setSettingsButtonVisibility(visibility)` | 设置设置按钮可见性 |
+| `setSysTimeVisibility(visibility)` | 设置系统时间可见性 |
 | `addDefaultControlComponent(String title, boolean isLive)` | 添加默认控制器 |
 | `start()` | 开始播放 |
 | `pause()` | 暂停播放 |
@@ -256,6 +311,7 @@ videoView.setOnPlayerKernelChangeListener(kernel -> {
 | `setOnDownSetClickListener(OnDownSetClickListener listener)` | 下一集点击监听 |
 | `setOnEpisodeSelectListener(OnEpisodeSelectListener listener)` | 选集选中监听 |
 | `setOnPlayerKernelChangeListener(OnPlayerKernelChangeListener listener)` | 播放内核切换监听 |
+| `setOnFullscreenPortraitClickListener(OnFullscreenPortraitClickListener listener)` | 竖屏全屏点击监听 |
 
 ### 画面比例常量
 

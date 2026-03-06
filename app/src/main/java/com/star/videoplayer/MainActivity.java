@@ -7,6 +7,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.color.DynamicColors;
 import com.star.play.StarVideoPlayer;
 import com.star.play.controller.StarEpisodeView;
 
@@ -25,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        DynamicColors.applyToActivityIfAvailable(this);
         setContentView(R.layout.activity_main);
         videoView = findViewById(R.id.player);
 
@@ -52,7 +54,10 @@ public class MainActivity extends AppCompatActivity {
             videoView.setUrl(URL);
             videoView.start();
         });
-
+        videoView.setVisibilityBottom(View.GONE, View.GONE, View.GONE, View.GONE);
+        videoView.setTitleButtonsVisibility(View.GONE, View.GONE, View.GONE, View.GONE);
+        // 显示竖屏全屏按钮
+        videoView.setFullscreenPortraitButtonVisibility(View.VISIBLE);
         videoView.start(); //开始播放，不调用则不自动播放
         videoView.setOnUpSetClickListener(new StarVideoPlayer.OnUpSetClickListener() {
             @Override

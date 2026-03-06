@@ -101,6 +101,18 @@
             app:icon="@drawable/animated_images"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/play"
+            app:layout_constraintEnd_toStartOf="@+id/fullscreen_portrait"
+            app:layout_constraintTop_toTopOf="@+id/play" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/fullscreen_portrait"
+            style="?attr/materialIconButtonFilledTonalStyle"
+            app:iconTint="?attr/colorPrimary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:icon="@drawable/fullscreen_portrait"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="@+id/play"
             app:layout_constraintEnd_toStartOf="@+id/fullscreen"
             app:layout_constraintTop_toTopOf="@+id/play" />
 
