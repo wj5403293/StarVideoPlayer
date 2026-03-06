@@ -405,6 +405,15 @@ videoView.setSysTimeVisibility(View.GONE);         // 系统时间
 
 ## 更新日志
 
+### v1.5.0 (2025-03-07)
+
+#### 修复问题
+- 🐛 修复 Slider 进度值超出范围导致崩溃的问题
+  - 当视频进度超过时长时，progress 值可能超过 1000，导致 `IllegalStateException`
+  - 添加 `Math.max(0, Math.min(1000, progress))` 范围限制
+
+---
+
 ### v1.4.0 (2025-03-07)
 
 #### 新增功能

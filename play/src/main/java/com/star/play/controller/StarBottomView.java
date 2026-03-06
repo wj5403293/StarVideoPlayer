@@ -549,6 +549,7 @@ public class StarBottomView extends FrameLayout implements IControlComponent {
 
         if (duration > 0) {
             float progress = (float) position / duration * 1000;
+            progress = Math.max(0, Math.min(1000, progress));
             if (mSeekBar != null) mSeekBar.setValue(progress);
             if (mBottomProgress != null) mBottomProgress.setProgress((int) progress);
 
