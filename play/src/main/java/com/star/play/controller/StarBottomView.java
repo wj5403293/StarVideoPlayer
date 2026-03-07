@@ -8,7 +8,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.FrameLayout;
+import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -44,6 +47,7 @@ public class StarBottomView extends FrameLayout implements IControlComponent {
     private boolean mIsDragging;
     private boolean mIsShowBottomProgress = true;
     private boolean mIsFullScreen = false;
+    private float mCurrentSpeed = 1.0f;
 
     private int mSelectVisibility = View.VISIBLE;
     private int mSpeedVisibility = View.VISIBLE;
@@ -54,6 +58,7 @@ public class StarBottomView extends FrameLayout implements IControlComponent {
 
     private OnSelectClickListener mOnSelectClickListener;
     private OnSpeedClickListener mOnSpeedClickListener;
+    private OnSpeedOptionSelectedListener mOnSpeedOptionSelectedListener;
     private OnUpSetClickListener mOnUpSetClickListener;
     private OnDownSetClickListener mOnDownSetClickListener;
     private OnProgressListener mOnProgressListener;
@@ -193,7 +198,28 @@ public class StarBottomView extends FrameLayout implements IControlComponent {
 
         if (mSpeedView != null) {
             mSpeedView.setOnClickListener(v -> {
-                if (mOnSpeedClickListener != null) mOnSpeedClickListener.onClick(v);
+                PopupMenu popup = new PopupMenu(getContext(), v);
+                popup.getMenuInflater().inflate(R.menu.popup_menu_speed, popup.getMenu());
+                Menu menu = popup.getMenu();
+                for (int i = 0; i < menu.size(); i++) {
+                    MenuItem item = menu.getItem(i);
+                    String speedText = item.getTitle().toString();
+                    float speed = parseSpeedText(speedText);
+                    if (Math.abs(speed - mCurrentSpeed) < 0.01f) {
+                        item.setChecked(true);
+                        break;
+                    }
+                }
+                popup.setOnMenuItemClickListener(item -> {
+                    String speedText = item.getTitle().toString();
+                    float speed = parseSpeedText(speedText);
+                    mCurrentSpeed = speed;
+                    if (mOnSpeedOptionSelectedListener != null) {
+                        mOnSpeedOptionSelectedListener.onSpeedOptionSelected(speed, speedText);
+                    }
+                    return true;
+                });
+                popup.show();
             });
         }
 
@@ -275,6 +301,10 @@ public class StarBottomView extends FrameLayout implements IControlComponent {
         void onClick(View view);
     }
 
+    public interface OnSpeedOptionSelectedListener {
+        void onSpeedOptionSelected(float speed, String speedText);
+    }
+
     public interface OnUpSetClickListener {
         void onClick(View view);
     }
@@ -299,6 +329,10 @@ public class StarBottomView extends FrameLayout implements IControlComponent {
         mOnSpeedClickListener = listener;
     }
 
+    public void setOnSpeedOptionSelectedListener(OnSpeedOptionSelectedListener listener) {
+        mOnSpeedOptionSelectedListener = listener;
+    }
+
     public void setOnUpSetClickListener(OnUpSetClickListener listener) {
         mOnUpSetClickListener = listener;
     }
@@ -313,6 +347,15 @@ public class StarBottomView extends FrameLayout implements IControlComponent {
 
     public void setOnFullscreenPortraitClickListener(OnFullscreenPortraitClickListener listener) {
         mOnFullscreenPortraitClickListener = listener;
+    }
+
+    private float parseSpeedText(String speedText) {
+        try {
+            String numStr = speedText.replace("x", "").replace("X", "");
+            return Float.parseFloat(numStr);
+        } catch (NumberFormatException e) {
+            return 1.0f;
+        }
     }
 
     public void showBottomProgress(boolean isShow) {
@@ -359,6 +402,16 @@ public class StarBottomView extends FrameLayout implements IControlComponent {
         if (mSpeedView != null) {
             mSpeedView.setVisibility(visibility);
         }
+    }
+
+    public void setSpeedButtonText(String text) {
+        if (mSpeedView != null) {
+            mSpeedView.setText(text);
+        }
+    }
+
+    public void setCurrentSpeed(float speed) {
+        mCurrentSpeed = speed;
     }
 
     public void setPreviousButtonVisibility(int visibility) {

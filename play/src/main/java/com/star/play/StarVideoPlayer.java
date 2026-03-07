@@ -206,7 +206,9 @@ public class StarVideoPlayer extends VideoView {
     private void setupControllerCallbacks() {
         mBottomView.setShowBottomProgress(!mHideProgress);
 
-        mBottomView.setOnSpeedClickListener(v -> mSettingsView.show());
+        mBottomView.setOnSpeedOptionSelectedListener((speed, speedText) -> {
+            setPlaybackSpeed(speed);
+        });
 
         mBottomView.setOnUpSetClickListener(v -> {
             if (mOnUpSetClickListener != null) mOnUpSetClickListener.onClick(v);
@@ -485,6 +487,7 @@ public class StarVideoPlayer extends VideoView {
         mCurrentSpeed = speed;
         mCurrentSpeedText = String.format(Locale.US, "%.1fX", speed);
         setSpeed(speed);
+        mBottomView.setCurrentSpeed(speed);
     }
 
     public float getPlaybackSpeed() {
