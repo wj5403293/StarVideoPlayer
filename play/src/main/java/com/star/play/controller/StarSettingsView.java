@@ -40,9 +40,6 @@ public class StarSettingsView extends FrameLayout implements IControlComponent {
     // 画面比例
     private ChipGroup mChipGroupScale;
 
-    // 播放内核
-    private ChipGroup mChipGroupPlayer;
-
     // 静音开关
     private MaterialSwitch mMuteSwitch;
 
@@ -79,10 +76,6 @@ public class StarSettingsView extends FrameLayout implements IControlComponent {
         void onMuteChanged(boolean isMute);
     }
 
-    public interface OnPlayerKernelChangeListener {
-        void onPlayerKernelChanged(String kernel);
-    }
-
     public interface OnHideProgressChangeListener {
         void onHideProgressChanged(boolean isHide);
     }
@@ -110,7 +103,6 @@ public class StarSettingsView extends FrameLayout implements IControlComponent {
 
     private OnScaleChangeListener mOnScaleChangeListener;
     private OnMuteChangeListener mOnMuteChangeListener;
-    private OnPlayerKernelChangeListener mOnPlayerKernelChangeListener;
     private OnHideProgressChangeListener mOnHideProgressChangeListener;
     private OnAutoRotateChangeListener mOnAutoRotateChangeListener;
     private OnTimingOptionSelectedListener mOnTimingOptionSelectedListener;
@@ -125,10 +117,6 @@ public class StarSettingsView extends FrameLayout implements IControlComponent {
 
     public void setOnMuteChangeListener(OnMuteChangeListener l) {
         mOnMuteChangeListener = l;
-    }
-
-    public void setOnPlayerKernelChangeListener(OnPlayerKernelChangeListener l) {
-        mOnPlayerKernelChangeListener = l;
     }
 
     public void setOnHideProgressChangeListener(OnHideProgressChangeListener l) {
@@ -180,8 +168,6 @@ public class StarSettingsView extends FrameLayout implements IControlComponent {
 
         // 画面比例 ChipGroup
         mChipGroupScale = findViewById(R.id.chipGroup);
-        // 播放内核 ChipGroup
-        mChipGroupPlayer = findViewById(R.id.chipGroupPlayer);
         // 静音开关
         mMuteSwitch = findViewById(R.id.switch_mute);
         // 隐藏进度条
@@ -235,18 +221,6 @@ public class StarSettingsView extends FrameLayout implements IControlComponent {
             int scaleType = mapScaleTextToType(text);
             if (mOnScaleChangeListener != null) {
                 mOnScaleChangeListener.onScaleChanged(scaleType, text);
-            }
-        });
-
-        // 播放内核选择
-        mChipGroupPlayer.setOnCheckedStateChangeListener((group, checkedIds) -> {
-            if (checkedIds.isEmpty()) return;
-            int id = checkedIds.get(0);
-            Chip chip = findViewById(id);
-            if (chip == null) return;
-            String kernel = chip.getText().toString();
-            if (mOnPlayerKernelChangeListener != null) {
-                mOnPlayerKernelChangeListener.onPlayerKernelChanged(kernel);
             }
         });
 
@@ -344,19 +318,6 @@ public class StarSettingsView extends FrameLayout implements IControlComponent {
             if (child instanceof Chip) {
                 Chip chip = (Chip) child;
                 if (chip.getText().toString().equals(text)) {
-                    chip.setChecked(true);
-                    break;
-                }
-            }
-        }
-    }
-
-    public void setPlayerKernel(String kernel) {
-        for (int i = 0; i < mChipGroupPlayer.getChildCount(); i++) {
-            View child = mChipGroupPlayer.getChildAt(i);
-            if (child instanceof Chip) {
-                Chip chip = (Chip) child;
-                if (chip.getText().toString().equals(kernel)) {
                     chip.setChecked(true);
                     break;
                 }

@@ -50,13 +50,6 @@ public class MainActivity extends AppCompatActivity {
         // 设置标题
         videoView.addDefaultControlComponent("短剧", false);
 
-        // 监听内核切换
-        videoView.setOnPlayerKernelChangeListener((kernel, factory) -> {
-            videoView.release();  // 先释放
-            videoView.setPlayerFactory(factory);
-            videoView.setUrl(URL);
-            videoView.start();
-        });
         // 非全屏时隐藏选集、倍速按钮，显示全屏按钮
         videoView.setVisibilityBottomNormal(
                 View.GONE, View.GONE, View.GONE, View.GONE,  // 选集、倍速、上一集、下一集

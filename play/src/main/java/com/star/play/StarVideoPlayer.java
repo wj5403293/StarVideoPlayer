@@ -27,9 +27,6 @@ import com.star.play.controller.StarTitleView;
 import java.util.Locale;
 
 import xyz.doikki.videoplayer.player.VideoView;
-import xyz.doikki.videoplayer.player.PlayerFactory;
-import xyz.doikki.videoplayer.ijk.IjkPlayerFactory;
-import xyz.doikki.videoplayer.exo.ExoMediaPlayerFactory;
 
 public class StarVideoPlayer extends VideoView {
 
@@ -42,15 +39,11 @@ public class StarVideoPlayer extends VideoView {
     private static final String KEY_AUTO_NEXT = "auto_next";
     private static final String KEY_HIDE_PROGRESS = "hide_progress";
     private static final String KEY_AUTO_ROTATE = "auto_rotate";
-    private static final String KEY_PLAYER_KERNEL = "player_kernel";
 
     private static final String TIMING_OFF = "不启用";
     private static final String TIMING_AFTER_CURRENT = "播完当前";
     private static final String TIMING_30_MIN = "30分钟";
     private static final String TIMING_60_MIN = "60分钟";
-
-    public static final String KERNEL_EXO = "ExoPlayer";
-    public static final String KERNEL_IJK = "IJKPlayer";
 
     private SharedPreferences mPrefs;
 
@@ -74,7 +67,6 @@ public class StarVideoPlayer extends VideoView {
     private int mScreenScaleType = SCREEN_SCALE_DEFAULT;
     private boolean mHideProgress = false;
     private boolean mAutoRotate = false;
-    private String mCurrentKernel = KERNEL_EXO;
     private String mCurrentUrl;
 
     public interface OnWindowClickListener {
@@ -97,16 +89,11 @@ public class StarVideoPlayer extends VideoView {
         void onClick(android.view.View view);
     }
 
-    public interface OnPlayerKernelChangeListener {
-        void onPlayerKernelChanged(String kernel, PlayerFactory factory);
-    }
-
     private OnWindowClickListener mOnWindowClickListener;
     private OnScreenClickListener mOnScreenClickListener;
     private OnSelectClickListener mOnSelectClickListener;
     private OnUpSetClickListener mOnUpSetClickListener;
     private OnDownSetClickListener mOnDownSetClickListener;
-    private OnPlayerKernelChangeListener mOnPlayerKernelChangeListener;
 
     public void setOnWindowClickListener(OnWindowClickListener l) {
         mOnWindowClickListener = l;
@@ -126,10 +113,6 @@ public class StarVideoPlayer extends VideoView {
 
     public void setOnDownSetClickListener(OnDownSetClickListener l) {
         mOnDownSetClickListener = l;
-    }
-
-    public void setOnPlayerKernelChangeListener(OnPlayerKernelChangeListener l) {
-        mOnPlayerKernelChangeListener = l;
     }
 
     public StarVideoPlayer(@NonNull Context context) {
@@ -172,7 +155,6 @@ public class StarVideoPlayer extends VideoView {
         setMute(mPrefs.getBoolean(KEY_MUTE, false));
         mHideProgress = mPrefs.getBoolean(KEY_HIDE_PROGRESS, false);
         mAutoRotate = mPrefs.getBoolean(KEY_AUTO_ROTATE, false);
-        mCurrentKernel = mPrefs.getString(KEY_PLAYER_KERNEL, KERNEL_EXO);
     }
 
     private void setupController() {
@@ -245,10 +227,6 @@ public class StarVideoPlayer extends VideoView {
             mPrefs.edit().putBoolean(KEY_MUTE, isMute).apply();
         });
 
-        mSettingsView.setOnPlayerKernelChangeListener(kernel -> {
-            switchPlayerKernel(kernel);
-        });
-
         mSettingsView.setOnHideProgressChangeListener(isHide -> {
             mHideProgress = isHide;
             mBottomView.setShowBottomProgress(!isHide);
@@ -319,7 +297,6 @@ public class StarVideoPlayer extends VideoView {
         mSettingsView.setMuteChecked(isMute());
         mSettingsView.setTimingText(mTimingText);
         mSettingsView.setLongPressSpeed(mLongPressSpeed);
-        mSettingsView.setPlayerKernel(mCurrentKernel);
         mSettingsView.setHideProgressChecked(mHideProgress);
         mSettingsView.setAutoRotateChecked(mAutoRotate);
 
@@ -330,19 +307,6 @@ public class StarVideoPlayer extends VideoView {
         int endProgress = mPrefs.getInt(KEY_SKIP_END_PROGRESS, 0);
         String endText = formatSkipTime(endProgress);
         mSettingsView.setSkipEndTime(endText, endProgress);
-    }
-
-    private void switchPlayerKernel(String kernel) {
-        mCurrentKernel = kernel;
-        mPrefs.edit().putString(KEY_PLAYER_KERNEL, kernel).apply();
-
-        PlayerFactory factory = KERNEL_IJK.equals(kernel) 
-                ? IjkPlayerFactory.create() 
-                : ExoMediaPlayerFactory.create();
-
-        if (mOnPlayerKernelChangeListener != null) {
-            mOnPlayerKernelChangeListener.onPlayerKernelChanged(kernel, factory);
-        }
     }
 
     @Override
@@ -550,16 +514,6 @@ public class StarVideoPlayer extends VideoView {
 
     public boolean isAutoRotate() {
         return mAutoRotate;
-    }
-
-    public void setPlayerKernel(String kernel) {
-        mCurrentKernel = kernel;
-        mSettingsView.setPlayerKernel(kernel);
-        mPrefs.edit().putString(KEY_PLAYER_KERNEL, kernel).apply();
-    }
-
-    public String getPlayerKernel() {
-        return mCurrentKernel;
     }
 
     public void setSkipStartTime(int seconds) {

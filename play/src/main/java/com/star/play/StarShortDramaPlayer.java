@@ -6,8 +6,6 @@ import android.util.AttributeSet;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import xyz.doikki.videoplayer.exo.ExoMediaPlayerFactory;
-
 public class StarShortDramaPlayer extends StarVideoPlayer {
 
     public StarShortDramaPlayer(@NonNull Context context) {
@@ -20,7 +18,6 @@ public class StarShortDramaPlayer extends StarVideoPlayer {
 
     public StarShortDramaPlayer(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        setPlayerFactory(ExoMediaPlayerFactory.create());
         hideShortDramaUI();
     }
 

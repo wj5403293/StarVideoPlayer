@@ -6,9 +6,9 @@
 
 ## 功能特性
 
-- **双内核支持** - 支持 IJKPlayer 和 ExoPlayer 两种播放内核，可在设置中切换
+- **播放内核** - 支持自定义播放内核（IJKPlayer、ExoPlayer 等），用户自行选择引入
 - **选集功能** - 剧集列表展示与快速切换，支持自定义适配器
-- **倍速播放** - 支持多档倍速（0.5x、0.75x、1.0x、1.25x、1.5x、2.0x）
+- **倍速播放** - 点击倍速按钮弹出菜单选择（0.5x ~ 3.0x）
 - **长按倍速** - 长按屏幕快速播放（默认3倍速，可自定义1.0x~10.0x）
 - **双击暂停/播放** - 双击屏幕切换播放/暂停状态
 - **定时关闭** - 支持30分钟、60分钟定时关闭
@@ -23,8 +23,8 @@
 - **隐藏进度条** - 可选择隐藏底部进度条
 - **自动旋转** - 支持根据设备方向自动切换横竖屏
 - **竖屏全屏** - 支持竖屏全屏模式，适合短剧场景
-- **按钮可见性控制** - 可控制底部和顶部各按钮的显示/隐藏
-- **短剧播放器** - 提供精简版播放器 `StarShortDramaPlayer`，隐藏选集/上下集按钮，默认使用 ExoPlayer 内核
+- **按钮可见性控制** - 可控制底部和顶部各按钮的显示/隐藏，支持区分全屏/非全屏状态
+- **短剧播放器** - 提供精简版播放器 `StarShortDramaPlayer`，隐藏选集/上下集按钮
 
 ## 引入方式
 
@@ -48,8 +48,9 @@ dependencyResolutionManagement {
 ```groovy
 dependencies {
     implementation 'xyz.doikki.android.dkplayer:dkplayer-java:3.3.7'
-    implementation 'xyz.doikki.android.dkplayer:player-ijk:3.3.7'
-    implementation 'xyz.doikki.android.dkplayer:player-exo:3.3.7'
+    // 根据需要选择播放内核（二选一或都引入）
+    implementation 'xyz.doikki.android.dkplayer:player-exo:3.3.7'   // ExoPlayer
+    // implementation 'xyz.doikki.android.dkplayer:player-ijk:3.3.7'  // IJKPlayer
     implementation 'com.github.1240444767:StarVideoPlayer:1.3.0'
 }
 ```
@@ -100,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
         
         videoView = findViewById(R.id.player);
         
-        // 设置播放内核（二选一）
+        // 必须设置播放内核（根据你引入的依赖选择）
         videoView.setPlayerFactory(ExoMediaPlayerFactory.create());  // ExoPlayer
         // videoView.setPlayerFactory(IjkPlayerFactory.create());    // IJKPlayer
         
@@ -143,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
 
 #### StarShortDramaPlayer 使用（短剧专用）
 
-`StarShortDramaPlayer` 继承自 `StarVideoPlayer`，自动隐藏了选集、上一集、下一集按钮，并默认使用 ExoPlayer 内核。
+`StarShortDramaPlayer` 继承自 `StarVideoPlayer`，自动隐藏了选集、上一集、下一集按钮。
 
 ```java
 public class ShortDramaActivity extends AppCompatActivity {
@@ -156,7 +157,8 @@ public class ShortDramaActivity extends AppCompatActivity {
         
         videoView = findViewById(R.id.player);
         
-        // 无需手动设置播放内核，已默认使用 ExoPlayer
+        // 必须设置播放内核
+        videoView.setPlayerFactory(ExoMediaPlayerFactory.create());
         videoView.setUrl("https://example.com/video.m3u8");
         videoView.addDefaultControlComponent("短剧标题", false);
         videoView.start();
@@ -392,8 +394,6 @@ videoView.setFullscreenPortraitButtonVisibilityFullscreen(View.GONE);
 | `setScreenScale(int scaleType)` | 设置画面比例 |
 | `setHideProgress(boolean hide)` | 设置是否隐藏底部进度条 |
 | `setAutoRotate(boolean autoRotate)` | 设置是否开启自动旋转 |
-| `setPlayerKernel(String kernel)` | 设置播放内核（"ExoPlayer" 或 "IJKPlayer"） |
-| `getPlayerKernel()` | 获取当前播放内核 |
 | `setVisibilityBottom(select, speed, previous, next)` | 设置底部按钮可见性（4参数，全局） |
 | `setVisibilityBottom(select, speed, previous, next, fullscreen, fullscreenPortrait)` | 设置底部按钮可见性（6参数，全局） |
 | `setVisibilityBottomNormal(select, speed, previous, next)` | 设置非全屏状态下底部按钮可见性（4参数） |
@@ -434,7 +434,7 @@ videoView.setFullscreenPortraitButtonVisibilityFullscreen(View.GONE);
 
 ### StarShortDramaPlayer 主要方法
 
-`StarShortDramaPlayer` 继承自 `StarVideoPlayer`，拥有父类所有方法，并默认使用 ExoPlayer 内核，隐藏了选集、上一集、下一集按钮。
+`StarShortDramaPlayer` 继承自 `StarVideoPlayer`，拥有父类所有方法，隐藏了选集、上一集、下一集按钮。
 
 ### 监听器设置
 
@@ -446,7 +446,6 @@ videoView.setFullscreenPortraitButtonVisibilityFullscreen(View.GONE);
 | `setOnUpSetClickListener(OnUpSetClickListener listener)` | 上一集点击监听 |
 | `setOnDownSetClickListener(OnDownSetClickListener listener)` | 下一集点击监听 |
 | `setOnEpisodeSelectListener(OnEpisodeSelectListener listener)` | 选集选中监听 |
-| `setOnPlayerKernelChangeListener(OnPlayerKernelChangeListener listener)` | 播放内核切换监听 |
 | `setOnFullscreenPortraitClickListener(OnFullscreenPortraitClickListener listener)` | 竖屏全屏点击监听 |
 
 ### 画面比例常量
@@ -472,6 +471,15 @@ videoView.setFullscreenPortraitButtonVisibilityFullscreen(View.GONE);
 本库基于 [DKPlayer](https://github.com/Doikki/DKPlayer) 开发，感谢原作者的贡献。
 
 ## 更新日志
+### v1.8.0 (2025-03-29)
+
+#### 优化改进
+- 移除设置面板中的播放内核切换功能，改为用户自行设置
+  - 用户需要根据引入的依赖自行调用 `setPlayerFactory()` 设置播放内核
+  - 避免因未引入某个播放内核导致切换时崩溃的问题
+  - 设置面板不再显示播放内核选择选项
+
+---
 
 ### v1.7.0 (2025-03-09)
 
@@ -482,12 +490,6 @@ videoView.setFullscreenPortraitButtonVisibilityFullscreen(View.GONE);
   - 新增 `setVisibilityBottomAll()` 一次性设置全屏和非全屏的按钮可见性（12参数）
   - 新增各按钮的 `setXxxButtonVisibilityNormal()` 和 `setXxxButtonVisibilityFullscreen()` 方法
   - 原有的 `setVisibilityBottom()` 和 `setXxxButtonVisibility()` 方法仍保留，同时影响全屏和非全屏
-
----
-
-### v1.6.0 (2025-03-07)
-
-#### 新增功能
 - ✨ 倍速按钮点击弹出速度选择菜单
   - 点击倍速按钮现在会弹出 PopupMenu 选择播放速度
   - 支持 0.5x、0.75x、1.0x、1.25x、1.5x、2.0x、2.5x、3.0x 八档速度
@@ -495,12 +497,14 @@ videoView.setFullscreenPortraitButtonVisibilityFullscreen(View.GONE);
   - 选择速度后立即应用到当前视频播放
 
 #### 优化改进
-- 倍速按钮不再打开设置面板，而是直接选择速度
-- 提升了倍速选择的操作便捷性
+- 移除设置面板中的播放内核切换功能，改为用户自行设置
+  - 用户需要根据引入的依赖自行调用 `setPlayerFactory()` 设置播放内核
+  - 避免因未引入某个播放内核导致切换时崩溃的问题
+  - 设置面板不再显示播放内核选择选项
 
 ---
 
-### v1.5.0 (2025-03-07)
+### v1.6.0 (2025-03-07)
 
 #### 修复问题
 - 🐛 修复 Slider 进度值超出范围导致崩溃的问题

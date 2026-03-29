@@ -190,69 +190,6 @@
                         </com.google.android.material.chip.ChipGroup>
                     </LinearLayout>
 
-                    <!-- 播放内核 -->
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="播放内核"
-                        android:textColor="?attr/colorOnBackground"
-                        android:textSize="14sp"
-                        android:textStyle="bold"
-                        android:letterSpacing="0.05"
-                        android:layout_margin="16dp"/>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-                        <com.google.android.material.chip.ChipGroup
-                            android:id="@+id/chipGroupPlayer"
-                            android:clipToPadding="false"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:clipChildren="false"
-                            android:paddingStart="16dp"
-                            android:paddingEnd="16dp"
-                            app:selectionRequired="true"
-                            app:singleSelection="true"
-                            app:chipSpacingHorizontal="6dp"
-                            app:chipSpacingVertical="6dp">
-
-                            <com.google.android.material.chip.Chip
-                                style="@style/Widget.Material3.Chip.Filter"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                                android:textColor="?attr/colorOnBackground"
-                                android:textSize="12sp"
-                                app:chipIconEnabled="false"
-                                app:chipIconSize="12dp"
-                                app:chipMinHeight="32dp"
-                                app:chipStrokeWidth="0dp"
-                                app:ensureMinTouchTargetSize="false"
-                                app:textEndPadding="6dp"
-                                app:textStartPadding="6dp"
-                                app:chipCornerRadius="16dp"
-                                android:checked="true"
-                                android:text="ExoPlayer"/>
-                            <com.google.android.material.chip.Chip
-                                style="@style/Widget.Material3.Chip.Filter"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                                android:textColor="?attr/colorOnBackground"
-                                android:textSize="12sp"
-                                app:chipIconEnabled="false"
-                                app:chipIconSize="12dp"
-                                app:chipMinHeight="32dp"
-                                app:chipStrokeWidth="0dp"
-                                app:ensureMinTouchTargetSize="false"
-                                app:textEndPadding="6dp"
-                                app:textStartPadding="6dp"
-                                app:chipCornerRadius="16dp"
-                                android:text="IJKPlayer"/>
-
-                        </com.google.android.material.chip.ChipGroup>
-                    </LinearLayout>
-
                     <!-- 静音 -->
                     <LinearLayout
                         android:layout_width="match_parent"

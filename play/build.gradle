@@ -67,5 +67,4 @@ dependencies {
     androidTestImplementation libs.espresso.core
     implementation 'xyz.doikki.android.dkplayer:dkplayer-java:3.3.7'
     implementation 'xyz.doikki.android.dkplayer:player-exo:3.3.7'
-    implementation 'xyz.doikki.android.dkplayer:player-ijk:3.3.7'
 }
