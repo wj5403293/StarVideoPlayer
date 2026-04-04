@@ -2,7 +2,7 @@
 
 一个基于 DLNA/UPnP 协议的 Android 视频投屏模块，支持 Material Design 3 设计风格。
 
-[![JitPack](https://jitpack.io/v/star-video-player/dlna-cast.svg)](https://jitpack.io/#star-video-player/dlna-cast)
+[![JitPack](https://jitpack.io/v/1240444767/StarDLNA.svg)](https://jitpack.io/#1240444767/StarDLNA)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 ## 功能特性
@@ -33,7 +33,15 @@ dependencyResolutionManagement {
 
 ```gradle
 dependencies {
-    implementation 'com.github.star-video-player:dlna-cast:1.0.0'
+    implementation 'com.github.1240444767:StarDLNA:dlna-cast:1.0.0'
+}
+```
+
+或使用 SNAPSHOT 版本（最新代码）：
+
+```gradle
+dependencies {
+    implementation 'com.github.1240444767:StarDLNA:dlna-cast-SNAPSHOT'
 }
 ```
 
