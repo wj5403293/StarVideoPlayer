@@ -1,0 +1,21 @@
+<resources>
+    <!-- 模块主题 - 继承 Material3 -->
+    <style name="Theme.DLNACast" parent="Theme.Material3.DayNight">
+        <!-- 可以在这里添加模块特定的主题配置 -->
+    </style>
+
+    <!-- BottomSheetDialog 主题 -->
+    <style name="Theme.DLNACast.BottomSheetDialog" parent="Theme.Material3.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/Widget.DLNACast.BottomSheet</item>
+    </style>
+
+    <style name="Widget.DLNACast.BottomSheet" parent="Widget.Material3.BottomSheet">
+        <item name="shapeAppearance">@style/ShapeAppearance.DLNACast.BottomSheet</item>
+    </style>
+
+    <style name="ShapeAppearance.DLNACast.BottomSheet" parent="ShapeAppearance.Material3.LargeComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopLeft">16dp</item>
+        <item name="cornerSizeTopRight">16dp</item>
+    </style>
+</resources>

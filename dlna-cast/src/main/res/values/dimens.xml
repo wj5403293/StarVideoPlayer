@@ -1,0 +1,15 @@
+<resources>
+    <!-- 卡片 -->
+    <dimen name="card_elevation">2dp</dimen>
+    <dimen name="card_corner_radius">12dp</dimen>
+
+    <!-- 间距 -->
+    <dimen name="spacing_small">8dp</dimen>
+    <dimen name="spacing_medium">16dp</dimen>
+    <dimen name="spacing_large">24dp</dimen>
+
+    <!-- 图标 -->
+    <dimen name="icon_size_small">24dp</dimen>
+    <dimen name="icon_size_medium">48dp</dimen>
+    <dimen name="icon_size_large">64dp</dimen>
+</resources>

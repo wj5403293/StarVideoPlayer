@@ -29,3 +29,4 @@ dependencyResolutionManagement {
 rootProject.name = "StarVideoPlayer"
 include ':app'
 include ':play'
+include ':dlna-cast'

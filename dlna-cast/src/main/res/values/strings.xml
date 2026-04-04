@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">DLNA Cast</string>
+
+    <!-- 设备列表 -->
+    <string name="select_device">选择投屏设备</string>
+    <string name="no_devices_found">未找到设备</string>
+    <string name="refresh">刷新</string>
+    <string name="device_icon">设备图标</string>
+    <string name="select">选择</string>
+
+    <!-- 投屏控制 -->
+    <string name="cast_icon">投屏图标</string>
+    <string name="disconnect">断开</string>
+    <string name="volume">音量</string>
+
+    <!-- 状态 -->
+    <string name="cast_status_idle">空闲</string>
+    <string name="cast_status_connecting">连接中…</string>
+    <string name="cast_status_preparing">准备中…</string>
+    <string name="cast_status_playing">播放中</string>
+    <string name="cast_status_paused">已暂停</string>
+    <string name="cast_status_buffering">缓冲中…</string>
+    <string name="cast_status_error">播放错误</string>
+    <string name="cast_status_completed">播放完成</string>
+
+    <!-- 错误信息 -->
+    <string name="error_no_device">请先选择投屏设备</string>
+    <string name="error_cast_failed">投屏失败</string>
+</resources>
