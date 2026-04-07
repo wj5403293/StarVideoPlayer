@@ -24,6 +24,8 @@
 - **自动旋转** - 支持根据设备方向自动切换横竖屏
 - **竖屏全屏** - 支持竖屏全屏模式，适合短剧场景
 - **按钮可见性控制** - 可控制底部和顶部各按钮的显示/隐藏，支持区分全屏/非全屏状态
+- **颜色自定义** - 支持自定义标题栏和底部控制栏的文字颜色、图标颜色和背景颜色
+- **拖动时间指示器** - 拖动进度条时显示气泡指示器，实时显示时间
 - **短剧播放器** - 提供精简版播放器 `StarShortDramaPlayer`，隐藏选集/上下集按钮
 
 ## 引入方式
@@ -373,6 +375,21 @@ videoView.setFullscreenButtonVisibilityFullscreen(View.GONE);
 videoView.setFullscreenPortraitButtonVisibilityFullscreen(View.GONE);
 ```
 
+### 7. 颜色自定义
+
+```java
+// 标题栏颜色设置
+videoView.setTitleTextColor(Color.WHITE);              // 标题文字颜色
+videoView.setSysTimeTextColor(Color.WHITE);            // 系统时间文字颜色
+videoView.setTitleContainerBackground(Color.TRANSPARENT);  // 标题栏背景颜色
+videoView.setButtonIconTint(Color.WHITE);               // 标题栏按钮图标颜色
+
+// 底部控制栏颜色设置
+videoView.setTimeTextColor(Color.WHITE);              // 时间文字颜色
+videoView.setBottomContainerBackground(Color.TRANSPARENT);  // 底部栏背景颜色
+videoView.setBottomButtonIconTint(Color.WHITE);           // 底部栏按钮图标颜色
+```
+
 ## API 说明
 
 ### StarVideoPlayer 主要方法
@@ -425,6 +442,13 @@ videoView.setFullscreenPortraitButtonVisibilityFullscreen(View.GONE);
 | `setScreenButtonVisibility(visibility)` | 设置投屏按钮可见性 |
 | `setSettingsButtonVisibility(visibility)` | 设置设置按钮可见性 |
 | `setSysTimeVisibility(visibility)` | 设置系统时间可见性 |
+| `setTitleTextColor(color)` | 设置标题文字颜色 |
+| `setSysTimeTextColor(color)` | 设置系统时间文字颜色 |
+| `setTitleContainerBackground(color)` | 设置标题栏背景颜色 |
+| `setButtonIconTint(color)` | 设置标题栏按钮图标颜色 |
+| `setTimeTextColor(color)` | 设置底部时间文字颜色 |
+| `setBottomContainerBackground(color)` | 设置底部栏背景颜色 |
+| `setBottomButtonIconTint(color)` | 设置底部栏按钮图标颜色 |
 | `addDefaultControlComponent(String title, boolean isLive)` | 添加默认控制器 |
 | `start()` | 开始播放 |
 | `pause()` | 暂停播放 |
@@ -471,6 +495,28 @@ videoView.setFullscreenPortraitButtonVisibilityFullscreen(View.GONE);
 本库基于 [DKPlayer](https://github.com/Doikki/DKPlayer) 开发，感谢原作者的贡献。
 
 ## 更新日志
+### v1.9.0 (2026-04-07)
+
+#### 新增功能
+- ✨ SeekBar 替换 Slider
+  - 进度条从 Material Slider 替换为原生 SeekBar
+  - 保留原有的拖动和进度显示功能
+- ✨ 拖动时间指示器
+  - 拖动进度条时显示气泡指示器
+  - 气泡跟随 thumb 位置实时移动
+  - 显示当前拖动位置对应的时间
+- ✨ 标题栏颜色自定义
+  - `setTitleTextColor(int color)` - 设置标题文字颜色
+  - `setSysTimeTextColor(int color)` - 设置系统时间文字颜色
+  - `setButtonIconTint(int color)` - 设置标题栏按钮图标颜色
+  - `setTitleContainerBackground(int color)` - 设置标题栏背景颜色
+- ✨ 底部控制栏颜色自定义
+  - `setTimeTextColor(int color)` - 设置时间文字颜色
+  - `setButtonIconTint(int color)` - 设置底部按钮图标颜色
+  - `setBottomContainerBackground(int color)` - 设置底部栏背景颜色
+
+---
+
 ### v1.8.0 (2025-03-29)
 
 #### 优化改进

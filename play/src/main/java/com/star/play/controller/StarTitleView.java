@@ -181,6 +181,39 @@ public class StarTitleView extends FrameLayout implements IControlComponent {
         }
     }
 
+    public void setTitleTextColor(int color) {
+        if (mTitleView != null) {
+            mTitleView.setTextColor(color);
+        }
+    }
+
+    public void setSysTimeTextColor(int color) {
+        if (mSysTimeView != null) {
+            mSysTimeView.setTextColor(color);
+        }
+    }
+
+    public void setButtonIconTint(int color) {
+        if (mBackView != null) {
+            mBackView.setIconTint(android.content.res.ColorStateList.valueOf(color));
+        }
+        if (mPipView != null) {
+            mPipView.setIconTint(android.content.res.ColorStateList.valueOf(color));
+        }
+        if (mScreenView != null) {
+            mScreenView.setIconTint(android.content.res.ColorStateList.valueOf(color));
+        }
+        if (mSettingsView != null) {
+            mSettingsView.setIconTint(android.content.res.ColorStateList.valueOf(color));
+        }
+    }
+
+    public void setTitleContainerBackground(int color) {
+        if (mTitleContainer != null) {
+            mTitleContainer.setBackgroundColor(color);
+        }
+    }
+
     @Override
     public void attach(@NonNull ControlWrapper controlWrapper) {
         mControlWrapper = controlWrapper;

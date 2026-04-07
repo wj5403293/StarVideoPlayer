@@ -3,12 +3,14 @@
     <item android:id="@android:id/background">
         <shape>
             <solid android:color="#7FFFFFFF"/>
+            <corners android:radius="12dp" />
         </shape>
     </item>
     <item android:id="@android:id/secondaryProgress">
         <clip>
             <shape>
                 <solid android:color="@android:color/white"/>
+                <corners android:radius="12dp" />
             </shape>
         </clip>
     </item>
@@ -16,6 +18,7 @@
         <clip>
             <shape>
                 <solid android:color="?attr/colorPrimary"/>
+                <corners android:radius="12dp" />
             </shape>
         </clip>
     </item>

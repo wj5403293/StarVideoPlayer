@@ -61,3 +61,4 @@ style ShapeAppearance.DLNACast.BottomSheet
 style Theme.DLNACast
 style Theme.DLNACast.BottomSheetDialog
 style Widget.DLNACast.BottomSheet
+xml network_security_config

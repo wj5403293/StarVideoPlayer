@@ -16,7 +16,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/back"
-            style="?attr/materialIconButtonFilledTonalStyle"
+            style="?attr/materialIconButtonStyle"
             app:iconTint="?attr/colorPrimary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -37,21 +37,21 @@
             tools:text="这是一个标题" />
 
         <com.google.android.material.button.MaterialButton
-            style="?attr/materialIconButtonFilledTonalStyle"
+            style="?attr/materialIconButtonStyle"
             app:iconTint="?attr/colorPrimary"
             android:id="@+id/pip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:icon="@drawable/picture_in_picture"/>
         <com.google.android.material.button.MaterialButton
-            style="?attr/materialIconButtonFilledTonalStyle"
+            style="?attr/materialIconButtonStyle"
             app:iconTint="?attr/colorPrimary"
             android:id="@+id/screen"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:icon="@drawable/airplay"/>
         <com.google.android.material.button.MaterialButton
-            style="?attr/materialIconButtonFilledTonalStyle"
+            style="?attr/materialIconButtonStyle"
             app:iconTint="?attr/colorPrimary"
             android:id="@+id/settings"
             android:layout_width="wrap_content"

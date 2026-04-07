@@ -47,10 +47,10 @@
                 <com.google.android.material.progressindicator.LinearProgressIndicator
                     android:id="@+id/pro_percent"
                     android:layout_width="100dp"
-                    android:layout_height="3dp"
+                    android:layout_height="4dp"
                     android:max="100"
-                    app:trackCornerRadius="4dp"
-                    app:trackThickness="8dp" />
+                    app:trackCornerRadius="6dp"
+                    app:trackThickness="10dp" />
 
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>

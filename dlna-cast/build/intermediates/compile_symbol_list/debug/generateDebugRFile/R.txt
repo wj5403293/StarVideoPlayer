@@ -59,3 +59,4 @@ int style ShapeAppearance_DLNACast_BottomSheet 0x0
 int style Theme_DLNACast 0x0
 int style Theme_DLNACast_BottomSheetDialog 0x0
 int style Widget_DLNACast_BottomSheet 0x0
+int xml network_security_config 0x0

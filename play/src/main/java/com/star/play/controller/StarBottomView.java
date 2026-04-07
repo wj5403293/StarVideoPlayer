@@ -13,13 +13,13 @@ import android.view.MenuItem;
 import android.widget.FrameLayout;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.google.android.material.button.MaterialButton;
-import com.google.android.material.slider.Slider;
 import com.star.play.R;
 
 import xyz.doikki.videoplayer.controller.ControlWrapper;
@@ -33,6 +33,7 @@ public class StarBottomView extends FrameLayout implements IControlComponent {
 
     private TextView mCurrTimeView;
     private TextView mTotalTimeView;
+    private TextView mTimeIndicatorView;
     private MaterialButton mSkipPreviousView;
     private MaterialButton mPlayView;
     private MaterialButton mSkipNextView;
@@ -40,7 +41,7 @@ public class StarBottomView extends FrameLayout implements IControlComponent {
     private MaterialButton mSelectedWritingsView;
     private MaterialButton mFullscreenView;
     private MaterialButton mFullscreenPortraitView;
-    private Slider mSeekBar;
+    private SeekBar mSeekBar;
     private ProgressBar mBottomProgress;
     private View mPlayButtonsContainer;
 
@@ -136,6 +137,7 @@ public class StarBottomView extends FrameLayout implements IControlComponent {
     private void bindViews(View root) {
         mCurrTimeView = root.findViewById(R.id.curr_time);
         mTotalTimeView = root.findViewById(R.id.total_time);
+        mTimeIndicatorView = root.findViewById(R.id.time_indicator);
         mSeekBar = root.findViewById(R.id.seekBar);
         mSkipPreviousView = root.findViewById(R.id.skip_previous);
         mPlayView = root.findViewById(R.id.play);
@@ -145,11 +147,6 @@ public class StarBottomView extends FrameLayout implements IControlComponent {
         mFullscreenView = root.findViewById(R.id.fullscreen);
         mFullscreenPortraitView = root.findViewById(R.id.fullscreen_portrait);
         mPlayButtonsContainer = root.findViewById(R.id.play_buttons_container);
-
-        if (mSeekBar != null) {
-            mSeekBar.setValueFrom(0f);
-            mSeekBar.setValueTo(1000f);
-        }
 
         setupClickListeners();
         setupSeekBarListener();
@@ -267,34 +264,45 @@ public class StarBottomView extends FrameLayout implements IControlComponent {
     private void setupSeekBarListener() {
         if (mSeekBar == null) return;
 
-        mSeekBar.addOnSliderTouchListener(new Slider.OnSliderTouchListener() {
+        mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
-            public void onStartTrackingTouch(@NonNull Slider slider) {
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (fromUser && mControlWrapper != null && mCurrTimeView != null) {
+                    long duration = mControlWrapper.getDuration();
+                    long seekPos = (long) (duration * progress / 1000f);
+                    mCurrTimeView.setText(PlayerUtils.stringForTime((int) seekPos));
+                    if (mTimeIndicatorView != null) {
+                        mTimeIndicatorView.setText(PlayerUtils.stringForTime((int) seekPos));
+                        updateTimeIndicatorPosition(seekBar);
+                    }
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
                 mIsDragging = true;
                 if (mControlWrapper != null) {
                     mControlWrapper.stopProgress();
                     mControlWrapper.stopFadeOut();
                 }
+                if (mTimeIndicatorView != null) {
+                    mTimeIndicatorView.setVisibility(View.VISIBLE);
+                }
             }
 
             @Override
-            public void onStopTrackingTouch(@NonNull Slider slider) {
+            public void onStopTrackingTouch(SeekBar seekBar) {
                 if (mControlWrapper != null) {
                     long duration = mControlWrapper.getDuration();
-                    long seekPos = (long) (duration * slider.getValue() / 1000f);
+                    long seekPos = (long) (duration * seekBar.getProgress() / 1000f);
                     mControlWrapper.seekTo(seekPos);
                     mIsDragging = false;
                     mControlWrapper.startProgress();
                     mControlWrapper.startFadeOut();
                 }
-            }
-        });
-
-        mSeekBar.addOnChangeListener((slider, value, fromUser) -> {
-            if (fromUser && mControlWrapper != null && mCurrTimeView != null) {
-                long duration = mControlWrapper.getDuration();
-                long seekPos = (long) (duration * value / 1000f);
-                mCurrTimeView.setText(PlayerUtils.stringForTime((int) seekPos));
+                if (mTimeIndicatorView != null) {
+                    mTimeIndicatorView.setVisibility(View.GONE);
+                }
             }
         });
     }
@@ -303,6 +311,32 @@ public class StarBottomView extends FrameLayout implements IControlComponent {
         if (mControlWrapper == null) return;
         Activity activity = PlayerUtils.scanForActivity(getContext());
         mControlWrapper.toggleFullScreen(activity);
+    }
+
+    private void updateTimeIndicatorPosition(SeekBar seekBar) {
+        if (mTimeIndicatorView == null || seekBar == null) return;
+
+        int seekBarWidth = seekBar.getWidth();
+        if (seekBarWidth == 0) return;
+
+        float progress = seekBar.getProgress() / (float) seekBar.getMax();
+
+        int[] seekBarLocation = new int[2];
+        seekBar.getLocationOnScreen(seekBarLocation);
+
+        int[] thisLocation = new int[2];
+        getLocationOnScreen(thisLocation);
+
+        float thumbScreenX = seekBarLocation[0] + progress * seekBarWidth;
+        float indicatorX = thumbScreenX - thisLocation[0];
+
+        int indicatorWidth = mTimeIndicatorView.getWidth();
+        int indicatorHeight = mTimeIndicatorView.getHeight();
+
+        int indicatorY = seekBarLocation[1] - thisLocation[1] - indicatorHeight - 10;
+
+        mTimeIndicatorView.setX(indicatorX - indicatorWidth / 2);
+        mTimeIndicatorView.setY(indicatorY);
     }
 
     private void togglePortraitFullScreen() {
@@ -527,6 +561,45 @@ public class StarBottomView extends FrameLayout implements IControlComponent {
         mCurrentSpeed = speed;
     }
 
+    public void setTimeTextColor(int color) {
+        if (mCurrTimeView != null) {
+            mCurrTimeView.setTextColor(color);
+        }
+        if (mTotalTimeView != null) {
+            mTotalTimeView.setTextColor(color);
+        }
+    }
+
+    public void setButtonIconTint(int color) {
+        if (mSkipPreviousView != null) {
+            mSkipPreviousView.setIconTint(android.content.res.ColorStateList.valueOf(color));
+        }
+        if (mPlayView != null) {
+            mPlayView.setIconTint(android.content.res.ColorStateList.valueOf(color));
+        }
+        if (mSkipNextView != null) {
+            mSkipNextView.setIconTint(android.content.res.ColorStateList.valueOf(color));
+        }
+        if (mSpeedView != null) {
+            mSpeedView.setIconTint(android.content.res.ColorStateList.valueOf(color));
+        }
+        if (mSelectedWritingsView != null) {
+            mSelectedWritingsView.setIconTint(android.content.res.ColorStateList.valueOf(color));
+        }
+        if (mFullscreenView != null) {
+            mFullscreenView.setIconTint(android.content.res.ColorStateList.valueOf(color));
+        }
+        if (mFullscreenPortraitView != null) {
+            mFullscreenPortraitView.setIconTint(android.content.res.ColorStateList.valueOf(color));
+        }
+    }
+
+    public void setBottomContainerBackground(int color) {
+        if (mCurrentLayout != null) {
+            mCurrentLayout.setBackgroundColor(color);
+        }
+    }
+
     public void setPreviousButtonVisibility(int visibility) {
         setPreviousButtonVisibilityNormal(visibility);
         setPreviousButtonVisibilityFullscreen(visibility);
@@ -666,7 +739,7 @@ public class StarBottomView extends FrameLayout implements IControlComponent {
                     mBottomProgress.setProgress(0);
                     mBottomProgress.setSecondaryProgress(0);
                 }
-                if (mSeekBar != null) mSeekBar.setValue(0);
+                if (mSeekBar != null) mSeekBar.setProgress(0);
                 if (mPlayView != null) mPlayView.setIconResource(R.drawable.play_arrow);
                 break;
             case VideoView.STATE_START_ABORT:
@@ -768,7 +841,7 @@ public class StarBottomView extends FrameLayout implements IControlComponent {
         if (duration > 0) {
             float progress = (float) position / duration * 1000;
             progress = Math.max(0, Math.min(1000, progress));
-            if (mSeekBar != null) mSeekBar.setValue(progress);
+            if (mSeekBar != null) mSeekBar.setProgress((int) progress);
             if (mBottomProgress != null) mBottomProgress.setProgress((int) progress);
 
             if (mControlWrapper != null) {
@@ -782,7 +855,7 @@ public class StarBottomView extends FrameLayout implements IControlComponent {
                 }
             }
         } else {
-            if (mSeekBar != null) mSeekBar.setValue(0);
+            if (mSeekBar != null) mSeekBar.setProgress(0);
             if (mBottomProgress != null) {
                 mBottomProgress.setProgress(0);
                 mBottomProgress.setSecondaryProgress(0);

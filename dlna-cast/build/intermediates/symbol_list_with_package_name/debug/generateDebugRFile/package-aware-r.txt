@@ -60,3 +60,4 @@ style ShapeAppearance_DLNACast_BottomSheet
 style Theme_DLNACast
 style Theme_DLNACast_BottomSheetDialog
 style Widget_DLNACast_BottomSheet
+xml network_security_config
