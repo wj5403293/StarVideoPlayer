@@ -712,6 +712,34 @@ public class StarVideoPlayer extends VideoView {
         mTitleView.setSysTimeVisibility(visibility);
     }
 
+    public void setTitleTextColor(int color) {
+        mTitleView.setTitleTextColor(color);
+    }
+
+    public void setSysTimeTextColor(int color) {
+        mTitleView.setSysTimeTextColor(color);
+    }
+
+    public void setTitleContainerBackground(int color) {
+        mTitleView.setTitleContainerBackground(color);
+    }
+
+    public void setButtonIconTint(int color) {
+        mTitleView.setButtonIconTint(color);
+    }
+
+    public void setTimeTextColor(int color) {
+        mBottomView.setTimeTextColor(color);
+    }
+
+    public void setBottomContainerBackground(int color) {
+        mBottomView.setBottomContainerBackground(color);
+    }
+
+    public void setBottomButtonIconTint(int color) {
+        mBottomView.setButtonIconTint(color);
+    }
+
     public int getCurrentEpisodeIndex() {
         return mCurrentEpisodeIndex;
     }
